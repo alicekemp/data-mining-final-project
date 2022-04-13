@@ -48,3 +48,18 @@ ggplot(merged_TSI, aes(x=Poverty_Percent_All_Ages, y=resid)) +
 
 merged_TSI = merged_TSI %>%
   mutate(over_TSI =  ifelse(resid > 50, 1, 0))
+###################
+
+#computing difference in SAT Math scores for economically disadvantaged students and not
+disadvantaged_delta = sat_district_data_class_2020 %>%
+  filter(Group == ("Economically Disadvantaged") | Group == "Not Economically Disadvantaged") %>%
+  group_by(DistName) %>%
+  mutate(delta_math = c((-1)*diff(Math),0)) %>%
+  filter(Group == ("Economically Disadvantaged"))
+merged_delta = inner_join(disadvantaged_delta, poverty_abridged_tx, by = "CntyName")
+lm3 = lm(delta_math ~ Poverty_Percent_All_Ages, data= merged_delta)
+
+plot(lm3)
+ggplot(merged_delta, aes(x=Poverty_Percent_All_Ages, y=delta_math)) +
+  geom_point() +
+  geom_smooth()

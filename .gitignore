@@ -39,3 +39,6 @@ vignettes/*.pdf
 .Renviron
 .DS_Store
 ~$sat-district-data-class-2020.xlsx
+~$PopulationReport.xlsx
+~$ta mining sources.docx
+.DS_Store

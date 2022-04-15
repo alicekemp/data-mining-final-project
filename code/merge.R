@@ -3,8 +3,10 @@ library(readr)
 
 sat_district_data_class_2020 <- read_csv("data/sat-district-data-class-2020.csv")
 sat_district_data_class_2020$CntyName = 
-  substr(sat_district_data_class_2020$CntyName, 1, nchar(sat_district_data_class_2020$CntyName)-7)
+  substr(sat_district_data_class_2020$CntyName, 1, 
+         nchar(sat_district_data_class_2020$CntyName)-7)
 
+sapply(sat_district_data_class_2020, function(x) sum(is.na(x)))
 # county pop merge
 USDA_county_pops_2020 <- read_csv("data/USDA-county-pops-2020.csv")
 
@@ -19,9 +21,68 @@ USDA_county_poverty_2019 <- read_csv("data/USDA-county-poverty-2019.csv", skip =
 USDA_county_poverty_2019 = USDA_county_poverty_2019 %>%
   rename('total_poverty_percent' = 'Percent...7') %>%
   rename('child_poverty_percent' = 'Percent...10') %>%
-  select('FIPS*', Name, 'RUC Code', total_poverty_percent, child_poverty_percent)
+  select('FIPS*', total_poverty_percent, child_poverty_percent)
 
-merged = inner_join(merged, USDA_county_poverty_2019, by = "FIPS*")
+merged = inner_join(merged, USDA_county_poverty_2019, by = "FIPS*") %>%
+  rename('FIPS' = 'FIPS*')
 
 #county education level merge
+USDA_Education_level_college_2020 <- read_csv("data/USDA-Education-level-college-2020.csv")
+USDA_Education_level_college_2020 = USDA_Education_level_college_2020 %>%
+  rename('Percent_college_grads_county_19' = '2015-2019') %>%
+  mutate(FIPS = as.numeric(FIPS)) %>%
+  select(FIPS, Percent_college_grads_county_19)
 
+merged = inner_join(merged, USDA_Education_level_college_2020, by='FIPS')
+
+#county income & unemployment merge
+USDA_income_unemployment_2019_2020 <- 
+  read_csv("data/USDA-income-unemployment-2019-2020.csv", skip = 1)
+USDA_income_unemployment_2019_2020 = USDA_income_unemployment_2019_2020 %>%
+  rename('unemployment_2019' = '2019') %>%
+  rename('unemployment_2020' =  '2020') %>%
+  rename('pct_state_median_HH_income' = '% of State Median HH Income') %>%
+  select(FIPS, unemployment_2019, unemployment_2020, pct_state_median_HH_income) %>%
+  mutate(FIPS = as.numeric(FIPS))
+
+merged = inner_join(merged, USDA_income_unemployment_2019_2020, by='FIPS')
+
+#school nutrition merge, merge starts with dim 57228,27
+School_Meals_2019_20 <- 
+  read_csv("data/School_Nutrition_Programs_-_Meal_Reimbursement_Information_-_Program_Year_2019-2020.csv")
+School_Meals_2019_20 = School_Meals_2019_20 %>%
+  select(ProgramYear, CEName, SiteID, SiteCounty, SiteName, EnrollmentQty, 
+         FreeEligQty, RedcEligQty, PaidEligQty, TotalReimbursement, BreakfastDays, 
+         LunchDays, SnackDays)
+
+        #losing granularity here, averaging over the school district and not the school
+School_Meals_Summary = School_Meals_2019_20 %>%
+  rename('DistName' = 'CEName') %>%
+  group_by(DistName)%>%
+  summarise(Enrollment = mean(EnrollmentQty), FreeElig_mean = mean(FreeEligQty),
+            RedcEligQty_mean = mean(RedcEligQty), PaidEligQty_mean = mean(PaidEligQty),
+            TotalReimbursement_sum = sum(TotalReimbursement))
+
+merged$DistName = toupper(merged$DistName)
+merged = left_join(merged, School_Meals_Summary, by='DistName')
+
+merged_SchoolMeals = left_join(merged, School_Meals_Summary, by='DistName')
+
+#abuse_neglect data merge (currently using 2020 data, but 2012-2021 is there)
+abuse_neglect <- read_csv("data/CCI_4.2_Completed_Abuse_Neglect_Residential_Child_Care_Investigations__RCCI__FY2012-FY2021.csv")
+
+
+abuse_neglect_2020 = abuse_neglect %>%
+  filter(`Fiscal Year` ==  2020) %>%
+  rename('CntyName'='County') %>%
+  group_by(CntyName) %>%
+  summarise(abuse_neglect_investigations = sum(`Completed RCCI Abuse/Neglect Investigations`))
+
+merged = left_join(merged,abuse_neglect_2020,by='CntyName')
+
+#discipline merge
+
+  
+  
+  
+  

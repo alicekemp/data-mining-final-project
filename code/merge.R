@@ -78,11 +78,43 @@ abuse_neglect_2020 = abuse_neglect %>%
   group_by(CntyName) %>%
   summarise(abuse_neglect_investigations = sum(`Completed RCCI Abuse/Neglect Investigations`))
 
-merged = left_join(merged,abuse_neglect_2020,by='CntyName')
+merged = left_join(merged,abuse_neglect_2020,by='CntyName') #57228 x 33
 
 #discipline merge
+# -999 indicates counts or percentages are not available (i.e. masked) to comply 
+# with Family Educational Rights and Privacy Act (FERPA).
+TEA_discipline <- read_csv("data/TEA-2019-2020-discipline-data.csv") %>%
+  rename('discipline_heading'='HEADING NAME')
 
+
+## reshape to widen the data frame so there is 1 obs per district
+TEA_discipline_adj = TEA_discipline %>%
+  select(-c(`AGGREGATION LEVEL`,`REGION`,CHARTER_STATUS, SECTION, HEADING))
+TEA_discipline_adj = TEA_discipline_adj %>%
+  pivot_wider(id_cols = c(DISTNAME,DISTRICT), 
+              names_from = discipline_heading, 
+              values_from = YR20, 
+              values_fn = max)
+
+## check where null values appear and remove columns with more than 230 nulls
+list1 = as.data.frame(sapply(TEA_discipline_adj, function(x) sum(is.na(x))))
+nullDF = list1 %>%
+  filter(list1[1] <= 230)
+valid_rownames =  rownames(nullDF)  
+
+TEA_discipline_final = TEA_discipline_adj %>%
+  select(valid_rownames) %>%
+  select(-c(`HISPANIC/LATINO`, `WHITE`)) %>% #manually remove these because they are weird
+  as.data.frame() %>%
+  rename('DistName'='DISTNAME') %>%
+  rename('District'='DISTRICT')
   
-  
-  
-  
+
+merged = left_join(merged,TEA_discipline_final,by='District') #57288 x 54
+
+#
+
+
+
+
+

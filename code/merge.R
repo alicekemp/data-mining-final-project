@@ -4,9 +4,21 @@ library(readr)
 sat_district_data_class_2020 <- read_csv("data/sat-district-data-class-2020.csv")
 sat_district_data_class_2020$CntyName = 
   substr(sat_district_data_class_2020$CntyName, 1, 
-         nchar(sat_district_data_class_2020$CntyName)-7)
+         nchar(sat_district_data_class_2020$CntyName)-7) #getting rid of "County"
+#c(Grads_Mskd, Exnees_Mskd, Crit_Mskd, TSI_Both_Mskd)
+## addressing masking (< symbols, just changing <1000 to 1000)
+sat_district_data_class_2020 = sat_district_data_class_2020 %>%
+  mutate(across(.cols = c(Grads_Mskd, Exnees_Mskd, Crit_Mskd, TSI_Both_Mskd), 
+                .fns = ~ifelse(substr(.x,1,1)=='<', as.numeric(substr(.x,2,nchar(.x))), as.numeric(.x))))
+sat_district_data_class_2020$Grads_Mskd = as.numeric(sat_district_data_class_2020$Grads_Mskd)
 
-sapply(sat_district_data_class_2020, function(x) sum(is.na(x)))
+
+sapply(sat_district_data_class_2020, class)
+
+word = "<1000"
+typeof(word)
+print(substr(word,2,2))
+nchar(word)
 # county pop merge
 USDA_county_pops_2020 <- read_csv("data/USDA-county-pops-2020.csv")
 
@@ -94,7 +106,7 @@ TEA_discipline_adj = TEA_discipline_adj %>%
   pivot_wider(id_cols = c(DISTNAME,DISTRICT), 
               names_from = discipline_heading, 
               values_from = YR20, 
-              values_fn = max)
+              values_fn = sum)
 
 ## check where null values appear and remove columns with more than 230 nulls
 list1 = as.data.frame(sapply(TEA_discipline_adj, function(x) sum(is.na(x))))
@@ -107,14 +119,26 @@ TEA_discipline_final = TEA_discipline_adj %>%
   select(-c(`HISPANIC/LATINO`, `WHITE`)) %>% #manually remove these because they are weird
   as.data.frame() %>%
   rename('DistName'='DISTNAME') %>%
-  rename('District'='DISTRICT')
+  rename('District'='DISTRICT') %>%
+  mutate(DistName = as.character(ifelse(DistName == "D'HANIS ISD", "D'HANIS SCHOOL", DistName))) %>%
+  mutate(across(.cols = everything(), .fns = ~ifelse(.x == -999, NA, .x))) #-999 missing code into NAs
+
+names(TEA_discipline_final) = make.names(colnames(TEA_discipline_final), unique = TRUE)
+
+merged = left_join(merged,TEA_discipline_final,by=c('District', 'DistName')) #57288 x 54
+
+#i dont think the ATUS has Texas data
+#what is Book2?
+
+
+# random checking of stuff
+testing = merged
+testing = testing %>%
+  mutate(across(.cols = everything(), .fns = ~ifelse(is.na(.x), 0,.x)))
   
+  
+sapply(testing, function(x) sum(x<0))
+sapply(merged, function(x) sum(is.na(x)))
 
-merged = left_join(merged,TEA_discipline_final,by='District') #57288 x 54
-
-#
-
-
-
-
+sapply(merged, class)
 

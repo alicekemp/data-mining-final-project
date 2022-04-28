@@ -168,3 +168,5 @@ names(na_frame) =  c('Variable','NA_count','object_class')
 saveRDS(merged, file='r_objects/cleaned_ed_data.Rda') #can load in using load()
 saveRDS(na_frame, file = 'r_objects/variable_NA_class.Rda')
 
+write_csv(merged, 'r_objects/cleaned_ed_data')
+

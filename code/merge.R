@@ -170,3 +170,4 @@ saveRDS(na_frame, file = 'r_objects/variable_NA_class.Rda')
 
 write_csv(merged, 'r_objects/cleaned_ed_data')
 
+cleaned = readRDS('/Users/jonathanbowman/Desktop/Repos/Stats/data-mining-final-project/r_objects/cleaned_ed_data.Rda')

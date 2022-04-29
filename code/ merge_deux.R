@@ -18,9 +18,7 @@ ed3_num = ed3 %>%
 
 ed3_merge = cbind(ed3_names, ed3_num)
 ed3_merge = ed3_merge[,-2]
-ed_merged = merge(ed2, ed3_merge, by = "DistName")
+ed_merged2 = merge(ed2, ed3_merge, by = "DistName")
 
-write_csv(ed_merged, 'r_objects/v2_cleaned_ed_data.csv')
+write_csv(ed_merged2, 'r_objects/v2_cleaned_ed_data.csv')
 
-
-class_list = as.data.frame(sapply(ed3_num, class))

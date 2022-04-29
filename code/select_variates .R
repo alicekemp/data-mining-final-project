@@ -1,0 +1,11 @@
+library(tidyverse)
+
+m3 = read.csv("r_objects/v2_cleaned_ed_data.csv") %>%
+  filter(Group == "All Students") %>% 
+  select(DistName, CntyName, Enrollment, DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, n_students, ERW, Math, Total, Grads_Mskd, Exnees_Mskd, Part_Rate, Crit_Mskd, Above_Crit_Rate, TSI_Both_Mskd, Above_TSI_Both_Rate, ann_grad_count_1819, avg_sat_1819, avg_act_1819, ann_dropout_rate, attendance_rate, RUC.code, Pop..2020, Change_2010.20_pct, total_poverty_percent, child_poverty_percent, Percent_college_grads_county_19, unemployment_2019, pct_state_median_HH_income, FreeElig_mean, RedcEligQty_mean, PaidEligQty_mean, abuse_neglect_investigations, DISTRICT.DISCIPLINE.RECORD.COUNT, X05.OUT.OF.SCHOOL.SUSPENSION, X06.IN.SCHOOL.SUSPENSION, Charter, st_pct_black, st_pct_hisp, st_pct_white, st_pct_native, st_pct_asian, st_pct_pac, st_pct_mult, st_pct_ecodis, st_pct_englishlearners, st_pct_speced, st_pct_bilingual, st_pct_gifted, tot_staff_fte, tot_teach_fte, staff_pct_centraladmin, staff_pct_schooladmin, staff_pct_profsupport, staff_pct_teach, staff_pct_educaides, staff_pct_aux, staff_pct_aux, avg_salary_central, avg_salary_prof, avg_salary_school, avg_salary_teach, staff_pct_minority, stud_teach_ratio, teach_pct_5underexp, teach_avgexp, teach_pct_advdegrees, teach_turnover_rate, teach_pct_black, teach_pct_hisp, teach_pct_white, teach_pct_native, teach_pct_asian, teach_pct_pac, teach_pct_mult, teach_pct_esl, taxable_value_per_student_17, local_tax_rate_18, tot_operating_reevenue, rev_pct_state, rev_pct_local, rev_pct_fed, fund_balance, net_assets_charter, tot_expend_1819, tot_opexpend_per_student, exp_pct_esl, exp_pct_athletics, exp_pct_gifted, exp_pct_hsallotment, exp_pct_kinder)
+
+m4 = m3 %>%
+  mutate(ani_per_stu = abuse_neglect_investigations / n_students,
+         st_pct_minority = st_pct_black + st_pct_hisp + st_pct_native + st_pct_asian + st_pct_pac + st_pct_mult, 
+         teach_pct_minority = teach_pct_black + teach_pct_hisp + teach_pct_native + teach_pct_asian + teach_pct_pac + teach_pct_mult, 
+         st_to_teach_minority = abs(st_pct_minority - teach_pct_minority))

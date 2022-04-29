@@ -171,4 +171,3 @@ save(na_frame, file = 'r_objects/variable_NA_class.Rda')
 write_csv(merged, 'r_objects/cleaned_ed_data')
 write_csv(merged, 'r_objects/variable_NA_class')
 
-view(merged2)

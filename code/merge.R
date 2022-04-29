@@ -165,6 +165,10 @@ na_frame = merge(na_list,class_list,by=0)
 names(na_frame) =  c('Variable','NA_count','object_class')
 
 #saving objects
+save(merged, file='r_objects/cleaned_ed_data.RData') #can load in using load()
+save(na_frame, file = 'r_objects/variable_NA_class.Rda')
 
 write_csv(merged, 'r_objects/cleaned_ed_data')
 write_csv(merged, 'r_objects/variable_NA_class')
+
+view(merged2)

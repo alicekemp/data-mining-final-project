@@ -5,17 +5,9 @@ date: '2022-04-29'
 output: html_document
 ---
 
+
+
 ```{r setup, include=FALSE}
-m2 = read.csv("r_objects/v2_cleaned_ed_data.csv")
-view(m2)
-m2[100:110,]
-
-m3 = m2 %>%
-  filter(Group == "All Students")
 
 
-testing = m3
-testing = testing %>%
-  mutate(across(.cols = everything(), .fns = ~ifelse(is.na(.x), 0,.x)))
-sapply(testing, function(x) sum(x<0))
 ```

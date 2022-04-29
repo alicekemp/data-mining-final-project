@@ -129,8 +129,8 @@ TEA_discipline_adj = TEA_discipline_adj %>%
 
 ## check where null values appear and remove columns with more than 230 nulls
 null_list = as.data.frame(sapply(TEA_discipline_adj, function(x) sum(is.na(x))))
-nullDF = list1 %>%
-  filter(list1[1] <= 230)
+nullDF = null_list %>%
+  filter(null_list[1] <= 230)
 valid_rownames =  rownames(nullDF)  
 
 TEA_discipline_final = TEA_discipline_adj %>%

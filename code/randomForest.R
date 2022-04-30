@@ -33,3 +33,12 @@ yhat_rfbot = predict(rf_bot, newdata = edbot_test)
 yhat_rfbot = na.omit(yhat_rfbot)
 rmse_rfbot = sqrt(mean((yhat_rfbot - edbot_test$PC_outcome)^2))
 
+# repeat for all districts
+ed_split = initial_split(ed, 0.8)
+ed_train = training(ed_split)
+ed_test = testing(ed_split)
+rf = randomForest(PC_outcome ~ ., data = ed_train, na.action = na.omit, mtry = 90, ntree = 50)
+
+yhat_rf = predict(rf, newdata = ed_test)
+yhat_rf = na.omit(yhat_rf)
+rmse_rf = sqrt(mean((yhat_rf - ed_test$PC_outcome)^2))

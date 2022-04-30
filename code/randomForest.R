@@ -1,20 +1,35 @@
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
+librarian::shelf(tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
 
 # import cleaned dataset
-ed = read.csv("r_objects/cleaned_ed_data.csv")
+ed = read.csv("r_objects/model_data.csv")
+head(ed)
 
-# select top 10% performing district groups by total score
-ed_top10 = ed %>%
-  slice_max(.,order_by = Total, prop = 0.1)
-colnames(ed_top10)
-rf1 = randomForest(Total ~ ., data = ed_top10, na.action = na.omit, ntree = 30)
-plot(rf1)
+# select top 20% performing districts by performance score
+set.seed(666)
+ed_top20 = ed %>%
+  slice_max(.,order_by = PC_outcome, prop = 0.2)
+ 
+edtop_split = initial_split(ed_top20, 0.8)
+edtop_train = training(edtop_split)
+edtop_test = testing(edtop_split)
+rf_top = randomForest(PC_outcome ~ ., data = edtop_train, na.action = na.omit, mtry = 20, ntree = 50)
 
-tree1 = rpart(Total ~ Group + Part_Rate + Above_TSI_Both_Rate + Pop..2020 + Change_2010.20_pct + total_poverty_percent + child_poverty_percent + Percent_college_grads_county_19 + unemployment_2019 + unemployment_2020 + pct_state_median_HH_income + FreeElig_mean + RedcEligQty_mean + PaidEligQty_mean + abuse_neglect_investigations + COUNT.OF.STUDENTS.SUSPENDED.IN.SCHOOL, data = ed_top10, control = rpart.control(cp = 0.0001))
-best_cp = tree1$cptable[which.min(tree1$cptable[,"xerror"]),"CP"] # find best cp
-tree_pruned = prune(tree1, cp = best_cp) # prune tree to best cp
-par(xpd=TRUE)
-prp(tree_pruned, faclen = 0, cex = 0.8, box.palette = "auto", extra = 100)
+yhat_rftop = predict(rf_top, newdata = edtop_test)
+yhat_rftop = na.omit(yhat_rftop)
+rmse_rftop = sqrt(mean((yhat_rftop - edtop_test$PC_outcome)^2))
+
+# select bottom 20% performing districts by performance score
+ed_bot20 = ed %>%
+  slice_min(.,order_by = PC_outcome, prop = 0.2)
+
+edbot_split = initial_split(ed_bot20, 0.8)
+edbot_train = training(edbot_split)
+edbot_test = testing(edbot_split)
+rf_bot = randomForest(PC_outcome ~ ., data = edbot_train, na.action = na.omit, mtry = 20, ntree = 50)
+
+yhat_rfbot = predict(rf_bot, newdata = edbot_test)
+yhat_rfbot = na.omit(yhat_rfbot)
+rmse_rfbot = sqrt(mean((yhat_rfbot - edbot_test$PC_outcome)^2))
 

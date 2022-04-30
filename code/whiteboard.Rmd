@@ -8,6 +8,6 @@ output: html_document
 
 
 ```{r setup, include=FALSE}
-
-
+ed = read.csv("r_objects/model_data.csv")
+head(ed)
 ```

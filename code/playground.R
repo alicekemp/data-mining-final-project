@@ -5,7 +5,7 @@ librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rp
 # import cleaned dataset
 ed = read.csv("r_objects/model_data.csv")
 head(ed)
-
+ed$PC_outcome
 # create top and bottom percentile classes based on PCA outcome and assign dummies to top and bottom 25%
 ed_q = ed %>% mutate(
   q75 = quantile(PC_outcome, probs = 0.75, na.rm = TRUE),

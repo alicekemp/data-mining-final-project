@@ -2,7 +2,7 @@
 title: "Data Mining Final Project"
 author: "Johnathan Bowman, Amal Kadri, and Alice Kemp"
 date: "Spring 2022"
-output: github_document
+output: pdf_document
 ---
 
 ## Introduction
@@ -23,20 +23,18 @@ output: github_document
 * `Above_TSI_Both_Rate`: Percent of graduating examinees meeting the college-ready graduates TSI criteria for the SAT on both ELA and mathematics
   An unfortunate issue when it comes to using Education data from a data analytics perspective is the issue of "Masking". Because of privacy considerations, schools must take care to not release any data that could be potentially used to identify specific students. As an example, if there are only a handful of Hispanic students in a given school, the school might have to mask any statistics on the racial/ethnic breakdown of educational outcomes in order to prevent the possibility that the data can be easily used to find the scores, economic, or disciplinary status of specific students. In aggregate, this means that there are a significant number of N/As and masked codes that had to be dealt with in order to proceed with the analysis. As a result, our data is biased slightly in favor of being more accurate for schools with larger, more diverse school populations, and may not capture all the useful variation for smaller school districts. However, given that this is a limitation with all publicly available, and our goal was to identify which patterns/abnormalities in the data we *could* see, rather than a more rigorous causal analysis, this seemed to us an acceptable constraint.
 
-```{r data, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
+## Analysis
+To start our analysis, we first merged our data and then created an aggregated "outcome" variable to measure district performance across a variety of metrics including SAT ERW and Math scores, previous year graduation rate, previous year SAT and ACT scores, and percentages of graduating students meeting the college-ready measures for SAT scores. To create this outcome variable, Principle Component Analysis (PCA) of rank 1 was used to reduce the dimensionality of our outcome variables and create one PC of weights that maximizes the variance found in the original outcome data. The resulting PC1 shows large weights from every performance metrics, with the minimal exception of previous year graduation rate. Next, 
+```{r analysis, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
+librarian::shelf(tidyverse, haven, kable, kableExtra)
 
-ed = read.csv("r_objects/model_data.csv")
-
-stargazer(ed, type = 'html', header = FALSE)
-
+testing = read.csv("r_objects/testing.csv")
+outcomes_PCA_table = prcomp(testing[,(1:8)], scale=TRUE, rank=1)
+data.frame(outcomes_PCA_table$rotation) %>% kbl(booktabs = T, format = 'latex', digits = 4, caption = "PCA of performance metrics") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```
 
-## Methodology
-
-## Analysis
 
 ## Findings
 

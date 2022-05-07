@@ -26,6 +26,7 @@ ed$lin_resid = resid(lin_mod)
 rmse(lin_mod, ed_test)
 
 write_csv(ed, "r_objects/merged_data_pred_resid.csv")
+save(lin_mod, file = 'r_objects/lin_mod.RData')
 
 
 # rmse <- sqrt(sum((exp(pred1) - ed_test$PC_outcome)^2)/length(ed_test$PC_outcome))

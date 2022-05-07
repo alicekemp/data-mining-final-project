@@ -35,6 +35,7 @@ testing <- testing %>%
   select(Above_TSI_Both_Rate, everything())
   
 #PCA
+write_csv(testing, "r_objects/testing.csv")
 outcomes_PCA_table = prcomp(testing[,(1:8)], scale=TRUE, rank=1)
 
 outcomes_PCA = as.data.frame(outcomes_PCA_table[["x"]])

@@ -28,5 +28,3 @@ rmse(lin_mod, ed_test)
 write_csv(ed, "r_objects/merged_data_pred_resid.csv")
 save(lin_mod, file = 'r_objects/lin_mod.RData')
 
-#We ran an initial model on three consequential economic indicators and demographic controls. Child poverty percent 
-

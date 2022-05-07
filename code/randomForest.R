@@ -3,7 +3,7 @@ if (!("librarian" %in% rownames(utils::installed.packages()))) {
 librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
 
 # import cleaned dataset
-ed = read.csv("r_objects/model_data.csv")
+ed = read.csv("r_objects/merged_data_pred_resid.csv")
 head(ed)
 
 # select top 20% performing districts by performance score

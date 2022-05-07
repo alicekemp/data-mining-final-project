@@ -2,12 +2,15 @@
 title: "Data Mining final project"
 author: "Johnathan Bowman, Amal Kadri and Alice Kemp"
 date: "Spring 2022"
-output: github_document
+output: pdf_document
 ---
+
+## Abstract
 
 ## Introduction
 
-## Data
+
+## Methods
 
 ```{r data, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
@@ -15,14 +18,12 @@ if (!("librarian" %in% rownames(utils::installed.packages()))) {
 librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
 
 ed = read.csv("r_objects/model_data.csv")
-stargazer(ed, type = 'html', header = FALSE)
+# stargazer(ed, type = 'html', header = FALSE)
 
 ```
 
-## Methodology
-
-## Analysis
-
-## Findings
+## Results
 
 ## Conclusion
+
+## Appendix

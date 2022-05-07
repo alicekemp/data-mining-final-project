@@ -23,10 +23,12 @@ summary_stats(lin_mod)
 ed$lin_pred = predict(lin_mod, data = ed)
 ed$lin_resid = resid(lin_mod)
 
+ed <- ed %>%
+  select(lin_pred, everything()) %>% 
+  select(lin_resid, everything())
+
 rmse(lin_mod, ed_test)
 
 write_csv(ed, "r_objects/merged_data_pred_resid.csv")
 save(lin_mod, file = 'r_objects/lin_mod.RData')
-
-#We ran an initial model on three consequential economic indicators and demographic controls. Child poverty percent 
 

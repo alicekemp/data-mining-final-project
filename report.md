@@ -106,7 +106,6 @@ To create this outcome variable, Principle Component Analysis (PCA) of
 rank 1 was used to reduce the dimensionality of our outcome variables
 and create one PC of weights that maximizes the variance found in the
 original outcome data. The resulting PC1
-
 ## Findings
 
 ## Conclusion

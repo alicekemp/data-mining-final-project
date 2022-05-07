@@ -8,7 +8,7 @@ head(ed)
 
 # create top and bottom percentile classes based on PCA outcome and assign dummies to top and bottom 25%
 ed_q = ed %>% mutate(
-  q75= quantile(PC_outcome, probs = 0.75, na.rm = TRUE),
+  q75 = quantile(PC_outcome, probs = 0.75, na.rm = TRUE),
   q25 = quantile(PC_outcome, probs = 0.25, na.rm = TRUE),
   quant = case_when(
     PC_outcome >= q75 ~ "top25",

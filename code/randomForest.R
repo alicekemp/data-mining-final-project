@@ -1,6 +1,6 @@
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
+librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
 
 # import cleaned dataset
 ed = read.csv("r_objects/model_data.csv")
@@ -14,8 +14,17 @@ ed_top20 = ed %>%
 edtop_split = initial_split(ed_top20, 0.8)
 edtop_train = training(edtop_split)
 edtop_test = testing(edtop_split)
-rf_top = randomForest(PC_outcome ~ ., data = edtop_train, na.action = na.omit, mtry = 20, ntree = 50)
+head(edtop_train)
+#### decision tree
+tree_top = rpart(PC_outcome ~ . -DistName - X, method="anova",data=edtop_train,
+                            control=rpart.control(minsplit=5, minbucket = 20, cp=1e-6, xval=5))
+#bestcp=tree_top$cptable[which.min(tree_top$cptable[,"xerror"]),"CP"]
+#tree_top2 = prune(tree_top,cp=bestcp)
+fancyRpartPlot(tree_top)
 
+
+#### random forest
+rf_top = randomForest(PC_outcome ~ ., data = edtop_train, na.action = na.omit, mtry = 20, ntree = 50)
 yhat_rftop = predict(rf_top, newdata = edtop_test)
 yhat_rftop = na.omit(yhat_rftop)
 rmse_rftop = sqrt(mean((yhat_rftop - edtop_test$PC_outcome)^2))

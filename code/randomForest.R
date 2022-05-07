@@ -21,7 +21,10 @@ tree_top = rpart(PC_outcome ~ . -DistName - X, method="anova",data=edtop_train,
 #bestcp=tree_top$cptable[which.min(tree_top$cptable[,"xerror"]),"CP"]
 #tree_top2 = prune(tree_top,cp=bestcp)
 fancyRpartPlot(tree_top)
-
+#deeper tree
+tree_top_2 = rpart(PC_outcome ~ . -DistName - X, method="anova",data=edtop_train,
+                 control=rpart.control(minsplit=5, minbucket = 10, cp=1e-7, xval=5))
+fancyRpartPlot(tree_top_2)
 
 #### random forest
 rf_top = randomForest(PC_outcome ~ ., data = edtop_train, na.action = na.omit, mtry = 20, ntree = 50)
@@ -37,6 +40,13 @@ edbot_split = initial_split(ed_bot20, 0.8)
 edbot_train = training(edbot_split)
 edbot_test = testing(edbot_split)
 rf_bot = randomForest(PC_outcome ~ ., data = edbot_train, na.action = na.omit, mtry = 20, ntree = 50)
+tree_roots = rpart(PC_outcome ~ . -DistName - X, method="anova",data=edbot_train,
+                 control=rpart.control(minsplit=5, minbucket = 20, cp=1e-6, xval=5))
+tree_roots_2 = rpart(PC_outcome ~ . -DistName - X, method="anova",data=edbot_train,
+                   control=rpart.control(minsplit=5, minbucket = 10, cp=1e-7, xval=5))
+fancyRpartPlot(tree_roots)
+fancyRpartPlot(tree_roots_2)
+
 
 yhat_rfbot = predict(rf_bot, newdata = edbot_test)
 yhat_rfbot = na.omit(yhat_rfbot)
@@ -47,6 +57,12 @@ ed_split = initial_split(ed, 0.8)
 ed_train = training(ed_split)
 ed_test = testing(ed_split)
 rf = randomForest(PC_outcome ~ ., data = ed_train, na.action = na.omit, mtry = 90, ntree = 50)
+tree_trunk = rpart(PC_outcome ~ . -DistName - X, method="anova",data=ed_train,
+                   control=rpart.control(minsplit=5, minbucket = 20, cp=1e-6, xval=5))
+tree_trunk_2 = rpart(PC_outcome ~ . -DistName - X, method="anova",data=ed_train,
+                     control=rpart.control(minsplit=5, minbucket = 10, cp=1e-7, xval=5))
+fancyRpartPlot(tree_trunk)
+fancyRpartPlot(tree_trunk_2)
 
 yhat_rf = predict(rf, newdata = ed_test)
 yhat_rf = na.omit(yhat_rf)

@@ -45,9 +45,13 @@ yhat_rf = predict(rf, newdata = mod_test)
 yhat_rf = na.omit(yhat_rf)
 rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))
 
-importance_table = data.frame(rf$importance)
+# vip table
+importance_table = as.data.frame(rf$importance)
+colnames(importance_table) = "importance"
+importance_table %>% arrange(desc(importance))
 write.csv(importance_table, "figures/rf_imp_table.csv")
 
+# partial dependence plots
 partial(rf, pred.var = "st_pct_asian", plot = TRUE,
         plot.engine = "ggplot2") + 
   ggtitle("Partial Dependence Plot of Percent Students Asian") + 

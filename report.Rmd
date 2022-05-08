@@ -30,7 +30,7 @@ To start our analysis, we first merged our data and then created an aggregated "
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
 librarian::shelf(tidyverse, haven, kable, kableExtra, modelr, rsample, stargazer)
-
+load("r_objects/training_data.RData")
 testing = read.csv("r_objects/testing.csv")
 outcomes_PCA_table = prcomp(testing[,(1:8)], scale=TRUE, rank=1)
 data.frame(outcomes_PCA_table$rotation) %>% kbl(booktabs = T, format = 'latex', digits = 4, caption = "PCA of performance metrics") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
@@ -51,7 +51,7 @@ For our decision tree and random forest models, we first scaled our variables th
 ```{r tree, file = "code/decision_tree.R", echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
 load("r_objects/tree_vip.Rdata")
 
-tree_vip %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
+tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```
 
 ### Random Forest
@@ -59,7 +59,7 @@ tree_vip %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Imp
   For the over performing school districts with positive residuals, we found the most important feature to be unemployment in 2020, with lower levels of county unemployment generally yielding higher performance than predicted. Similarly, we found that the next most important feature was the ten-year county population percent change, with districts in counties with decreasing populations actually yielding higher over-performance than districts in counties with increasing populations. Next, we found that the percentage of students who were economically disadvantaged had a negative effect on over-performance with over-performing districts with the highest percentages of economically disadvantaged students seeing the lowest gain over predicted performance. This seems to align with findings in other studies that state schools with higher populations of students who come from lower socio-economic households having lower relative performance. On the other hand, the percentage of students who are deemed "gifted and talented" appears to have a positive effect on over-performance, with districts with higher percentages of gifted students having higher than predicted performance scores. However, this feature is likely prone to sample bias, with certain districts that are likely already high-performing testing their students at a higher level than lower performing districts. The final feature in the top five is RUC code, a measure of how rural versus urban a school district is on a scale from 1 to 9. As seen in the figure below, we observe that there is overall in positive and increasing effect of RUC on over-performance, with more urban districts having higher than predicted performance than more rural districts. 
 ```{r rf_over, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
 load("r_objects/rf_over_vip.Rdata")
-
+load("r_objects/rf_over.Rdata")
 # vip table
 rf_over_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Overperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
@@ -77,6 +77,7 @@ print(plot)
 
 ```{r rf_under, file = "code/randomForest_new.R", echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
 load("r_objects/rf_under_vip.Rdata")
+load("r_objects/rf_under.Rdata")
 
 # vip table
 rf_over_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Underperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
@@ -95,12 +96,13 @@ print(plot)
 
 ```{r rf_under, file = "code/randomForest_new.R", echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
 load("r_objects/rf_vip.Rdata")
+load("r_objects/rf.Rdata")
 
 # vip table
-rf_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for All Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
+importance_table %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for All Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
 # top 5 partial dependence plots 
-feats = rf_vip[,1]
+feats = importance_table[,1]
 par(mfrow = c(3,2))
 for (i in feats){
 plot = partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 

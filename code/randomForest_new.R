@@ -18,6 +18,7 @@ rf_over = randomForest(lin_resid ~ . , data = over_train, na.action = na.omit, m
 yhat_rf_over = predict(rf_over, newdata = over_test)
 yhat_rf_over = na.omit(yhat_rf_over)
 rmse_rf_over = sqrt(mean((yhat_rf_over - over_test$lin_resid)^2))
+save(rf_over, file = "r_objects/rf_over.RData")
 
 # create VIP table
 imp_table_over = as.data.frame(rf_over$importance) %>% rownames_to_column("feature")
@@ -43,6 +44,7 @@ under_test = testing(under_split)
 
 #### random forest - under only 
 rf_under = randomForest(lin_resid ~ . , data = under_train, na.action = na.omit, mtry = 81, ntree = 50)
+save(rf_under, file = "r_objects/rf_under.RData")
 
 yhat_rf_under = predict(rf_under, newdata = under_test)
 yhat_rf_under = na.omit(yhat_rf_under)
@@ -72,6 +74,7 @@ rf = randomForest(lin_resid ~ ., data = mod_train, na.action = na.omit, mtry = 8
 yhat_rf = predict(rf, newdata = mod_test)
 yhat_rf = na.omit(yhat_rf)
 rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))
+save(rf, file = "r_objects/rf.RData")
 
 # vip table
 importance_table = as.data.frame(rf$importance) %>% rownames_to_column("feature")
@@ -79,4 +82,7 @@ colnames(importance_table) = c("feature", "importance")
 importance_table %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
 write.csv(importance_table, "figures/rf_imp_table.csv")
 save(importance_table, file = "r_objects/rf_vip.RData")
+
+#save training data
+save(over_train,under_train,mod_train, file = "r_objects/training_data.RData")
 

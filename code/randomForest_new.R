@@ -27,8 +27,8 @@ rf_over_vip = imp_table_over %>% arrange(desc(as.numeric(importance))) %>% top_n
 save(rf_over_vip, file = "r_objects/rf_over_vip.RData")
 
 # pdp of top 5 features by importance
-feats = rf_over_vip[,1]
-for (i in feats){
+feats_over = rf_over_vip[,1]
+for (i in feats_over){
 plot = partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
   ggtitle(paste("Partial Dependence Plot of ", i)) + 
   xlab(paste(i)) + 
@@ -55,8 +55,8 @@ colnames(imp_table_under) = c("feature", "importance")
 rf_under_vip = imp_table_under %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
 save(rf_under_vip, file = "r_objects/rf_under_vip.RData")
 
-feats = rf_under_vip[,1]
-under_plots = for (i in feats){
+feats_under = rf_under_vip[,1]
+under_plots = for (i in feats_under){
   plot = partial(rf_under, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
     ggtitle(paste("Partial Dependence Plot of ", i)) + 
     xlab(paste(i)) + 

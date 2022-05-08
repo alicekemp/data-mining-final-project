@@ -4,7 +4,7 @@ librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rp
 
 data = read.csv("r_objects/model_scaled_data.csv")
 mod = data %>%
-  select(-c(lin_pred, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte, Pop..2020, n_students, DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, Enrollment, unemployment_2020)) %>%
+  select(-c(lin_pred, X.1, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte, Pop..2020, n_students, DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, Enrollment, unemployment_2020)) %>%
   mutate(RUC.code = as.factor(RUC.code))
 
 ## make some forests
@@ -77,9 +77,9 @@ rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))
 save(rf, file = "r_objects/rf.RData")
 
 # vip table
-importance_table = as.data.frame(rf$importance) %>% rownames_to_column("feature")
+importance_table = as.data.frame(rf$importance) %>% rownames_to_column("feature") 
 colnames(importance_table) = c("feature", "importance")
-importance_table %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
+importance_table = importance_table %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
 write.csv(importance_table, "figures/rf_imp_table.csv")
 save(importance_table, file = "r_objects/rf_vip.RData")
 

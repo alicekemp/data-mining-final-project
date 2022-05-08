@@ -41,7 +41,7 @@ under_split = initial_split(under_perf, 0.8)
 under_train = training(under_split)
 under_test = testing(under_split)
 
-#### random forest - over only 
+#### random forest - under only 
 rf_under = randomForest(lin_resid ~ . , data = under_train, na.action = na.omit, mtry = 81, ntree = 50)
 
 yhat_rf_under = predict(rf_under, newdata = under_test)
@@ -61,6 +61,12 @@ under_plots = for (i in feats){
     ylab("Predicted Resid")
   print(plot)
 }
+
+#repeat for all districts
+mod_split = initial_split(mod, 0.8)
+mod_train = training(mod_split)
+mod_test = testing(mod_split)
+
 #### random forest - all
 rf = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = mod_train, na.action = na.omit, mtry = 83, ntree = 50)
 yhat_rf = predict(rf, newdata = mod_test)
@@ -68,8 +74,8 @@ yhat_rf = na.omit(yhat_rf)
 rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))
 
 # vip table
-importance_table = as.data.frame(rf$importance)
-colnames(importance_table) = "importance"
-importance_table %>% arrange(desc(importance))
+importance_table = as.data.frame(rf$importance) %>% rownames_to_column("feature")
+colnames(importance_table) = c("feature", "importance")
+importance_table %>% arrange(desc(importance)) %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
 write.csv(importance_table, "figures/rf_imp_table.csv")
 

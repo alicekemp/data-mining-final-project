@@ -15,9 +15,9 @@ over_test = testing(over_split)
 
 #### random forest - over only 
 rf_over = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = over_train, na.action = na.omit, mtry = 83, ntree = 50)
-yhat_rf = predict(rf_over, newdata = over_test)
-yhat_rf = na.omit(yhat_rf)
-rmse_rf = sqrt(mean((yhat_rf - over_test$lin_resid)^2))
+yhat_rf_over = predict(rf_over, newdata = over_test)
+yhat_rf_over = na.omit(yhat_rf_over)
+rmse_rf_over = sqrt(mean((yhat_rf_over - over_test$lin_resid)^2))
 
 # create VIP table
 imp_table_over = as.data.frame(rf_over$importance) %>% rownames_to_column("feature")
@@ -28,7 +28,7 @@ save(rf_over_vip, file = "r_objects/rf_over_vip.RData")
 # pdp of top 5 features by importance
 feats = rf_over_vip[,1]
 for (i in feats){
-plot = partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+plot = partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
   ggtitle(paste("Partial Dependence Plot of ", i)) + 
   xlab(paste(i)) + 
   ylab("Predicted Resid")

@@ -66,7 +66,7 @@ rf_over_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Va
 feats = rf_over_vip[,1]
 par(mfrow = c(3,2))
 for (i in feats){
-plot = partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+plot = partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
   ggtitle(paste("Partial Dependence Plot of ", i)) + 
   xlab(paste(i)) + 
   ylab("Predicted Resid")

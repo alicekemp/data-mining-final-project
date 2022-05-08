@@ -29,7 +29,7 @@ To start our analysis, we first merged our data and then created an aggregated "
 ```{r analysis, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer)
+librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer, randomForest)
 load(file = "all_objects.RData")
 # load("r_objects/training_data.RData")
 testing = read.csv("r_objects/testing.csv")
@@ -91,7 +91,7 @@ rf_over_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Va
 feats = rf_over_vip[,1]
 par(mfrow = c(3,2))
 for (i in feats){
-plot = partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+plot = pdp::partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
   ggtitle(paste("Partial Dependence Plot of ", i)) + 
   xlab(paste(i)) + 
   ylab("Predicted Resid")
@@ -109,7 +109,7 @@ rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: V
 feats = rf_under_vip[,1]
 par(mfrow = c(3,2))
 for (i in feats){
-plot = partial(rf_under, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+plot = pdp::partial(rf_under, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
   ggtitle(paste("Partial Dependence Plot of ", i)) + 
   xlab(paste(i)) + 
   ylab("Predicted Resid")

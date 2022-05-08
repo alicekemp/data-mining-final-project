@@ -68,7 +68,7 @@ mod_train = training(mod_split)
 mod_test = testing(mod_split)
 
 #### random forest - all
-rf = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = mod_train, na.action = na.omit, mtry = 83, ntree = 50)
+rf = randomForest(lin_resid ~ ., data = mod_train, na.action = na.omit, mtry = 83, ntree = 50)
 yhat_rf = predict(rf, newdata = mod_test)
 yhat_rf = na.omit(yhat_rf)
 rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))
@@ -76,6 +76,7 @@ rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))
 # vip table
 importance_table = as.data.frame(rf$importance) %>% rownames_to_column("feature")
 colnames(importance_table) = c("feature", "importance")
-importance_table %>% arrange(desc(importance)) %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
+importance_table %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
 write.csv(importance_table, "figures/rf_imp_table.csv")
+save(importance_table, file = "r_objects/rf_vip.RData")
 

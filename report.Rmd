@@ -38,18 +38,34 @@ data.frame(outcomes_PCA_table$rotation) %>% kbl(booktabs = T, format = 'latex', 
 Next, we fit the loadings of PC1 on to our original district-level data resulting in a singular outcome performance variable. The next step in our analysis was to create a simple linear OLS regression of our new weighted outcome variable on a selection of covariates believed to be most indicative of performance based on previous literature. These features included median household income measured as a percent of the statewide median, the child poverty rate in each county, average faculty salary, along with percentages for student population by race (Black, Hispanic, White, Asian, Native American, Pacific Islander, and multi-racial). Child poverty percent effects has both the resources a child has access to and is associated with other deviant behavior like truancy. Percent state median income defines the percent of the mean income for the county of the states median income. For instance, a county with 1.5 is a county with a mean income 50% higher than the state median. Average school salary describes the amount of resources that are going to schools. As observed in the model results in Table 2, we find that percent of state median household income and average school salary are highly statistically significant in predicting district performance. This result supports other studies on the subject, however, this does not explain why some school districts who would be predicted to perform at a certain level do not. These districts are represented in the residuals of our linear model, which we will next use as the outcome variable in a series of machine learning models. 
 
 ```{r ols, echo = FALSE, message=FALSE, warning = FALSE, results = 'asis'}
-load("~/statistical-learning/data-mining-final-project/r_objects/lin_mod.RData")
+load("r_objects/lin_mod.RData")
 stargazer(lin_mod, header = FALSE, title = "Linear Model - PC1")
 ```
 
 ### Decision Tree
-```{r tree, echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
-load("~/statistical-learning/data-mining-final-project/r_objects/lin_mod.RData")
+For our decision tree and random forest models, we first scaled our variables that used counts as to normalize based on student enrollment in each district. Then, a decision tree was fitted with our residuals from the OLS model as the outcome variable of interest. As seen in Figure 1, the most important split was on previous year's total expenditure per student, with districts spending more per student having higher residuals, i.e. over performing their predicted performance. Interestingly, the model did not pick up current year's expenditure per student as a significant split, although a high "fund balance", or the remaining district funds at the end of the school year, was the next significant predictor for overperforming schools. Next, we observe average salary for central faculty (i.e. Principals, Vice Principals, and other administrative positions), with a lower salary indicating negative residuals, or underperformance. Racial diversity was another significant factor with 
+
+![Fig 1: Decision Tree](figures/tree.png)
+
+```{r tree, file = "code/randomForest_new.R", echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
+tree_vip = read_csv("figures/tree_vip.csv")
+colnames(tree_vip) = "Importance"
+tree_vip %>% order(-Importance)
+kbl(tree_vip, booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
 ```
 
-
 ### Random Forest
+To further deepen the model, we next used a random forest of 50 trees to identify the features most predictive of an over or under performing district.
+```{r}
+
+```
+![Fig 2: Partial Dependence of Fund Balance](figures/pdp_fundbal.png)
+![Fig 3: Partial Dependence of Operating Revenue](figures/pdp_oprev.png)
+![Fig 4: Partial Dependence of Student Percentage Asian](figures/pdp_stasian.png)
+![Fig 5: Partial Dependence of Student Percentage Hispanic](figures/pdp_sthisp.png)
+![Fig 6: Partial Dependence of Teacher Percentage Black](figures/pdp_teachblack.png)
+
 
 ## Findings
 

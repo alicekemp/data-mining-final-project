@@ -85,4 +85,4 @@ save(importance_table, file = "r_objects/rf_vip.RData")
 
 #save training data
 save(over_train,under_train,mod_train, file = "r_objects/training_data.RData")
-
+save.image(file = "all_objects.RData")

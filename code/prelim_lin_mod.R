@@ -2,6 +2,7 @@
 library(tidyverse)
 library(rsample)
 library(modelr)
+library(ggplot2)
 
 #load data
 ed = read.csv("r_objects/model_data.csv")
@@ -26,8 +27,26 @@ ed <- ed %>%
   select(lin_pred, everything()) %>% 
   select(lin_resid, everything())
 
-rmse(lin_mod, ed_test)
+rmse(lin_mod, ed)
 
 write_csv(ed, "r_objects/merged_data_pred_resid.csv")
 save(lin_mod, file = 'r_objects/lin_mod.RData')
 
+
+ggplot(ed) +
+  geom_point(aes(x=PC_outcome,y=lin_pred)) +
+  geom_hline(yintercept = 0,color = 'red')
+ggplot(ed) +
+  geom_point(aes(x=PC_outcome,y=lin_resid)) +
+  geom_hline(yintercept = 0,color = 'red')
+
+ggplot(ed) +
+  geom_point(aes(x=PC_outcome,y=lin_pred)) +
+  geom_hline(yintercept = 0,color = 'red')
+  
+  
+plot(ed$lin_resid,ed$PC_outcome)
+  
+  
+  
+  

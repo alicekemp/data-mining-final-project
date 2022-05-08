@@ -1,6 +1,6 @@
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kableExtra)
+librarian::shelf(rattle, tidyverse, haven, mosaic, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, randomForest, randomForestExplainer,pdp, scales, vip, kableExtra)
 
 mod = read.csv("r_objects/model_scaled_data.csv")
 
@@ -19,6 +19,7 @@ tree_vip = vip_tree %>% rownames_to_column( "feature")
 colnames(tree_vip) = c("feature", "importance")
 tree_vip_top = tree_vip %>% top_n(8) 
 save(tree_vip_top, file = "r_objects/tree_vip.Rdata")
+save(ed_tree, file = "r_objects/tree.Rdata")
 
 #plotcp(ed_tree)
 #printcp(ed_tree)

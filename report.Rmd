@@ -29,7 +29,7 @@ To start our analysis, we first merged our data and then created an aggregated "
 ```{r analysis, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, kable, kableExtra, modelr, rsample, stargazer)
+librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer)
 load("r_objects/training_data.RData")
 testing = read.csv("r_objects/testing.csv")
 outcomes_PCA_table = prcomp(testing[,(1:8)], scale=TRUE, rank=1)
@@ -47,9 +47,10 @@ stargazer(lin_mod, header = FALSE, title = "Linear Model - PC1")
 For our decision tree and random forest models, we first scaled our variables that used counts as to normalize based on student enrollment in each district. Then, a decision tree was fitted with our residuals from the OLS model as the outcome variable of interest. As seen in Figure 1, the most important split was on previous year's total expenditure per student, with districts spending more per student having higher residuals, i.e. over performing their predicted performance. Interestingly, the model did not pick up current year's expenditure per student as a significant split, although a high "fund balance", or the remaining district funds at the end of the school year, was the next significant predictor for over-performing schools. Next, we observe average salary for central faculty (i.e. Principals, Vice Principals, and other administrative positions), with a lower salary indicating negative residuals, or under-performance. Racial diversity was another significant factor with 
 
 
-```{r tree, echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
+```{r tree, file = "code/decision_tree.R", echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
 load("r_objects/tree_vip.Rdata")
-
+load("r_objects/tree.Rdata")
+rattle::fancyRpartPlot(ed_tree)
 tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```
 
@@ -57,7 +58,7 @@ tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable
   To further deepen the model, we next split our data into districts with positive and negative residuals, representing districts that over performed relative to their predicted performance and those who under performed relative to their predicted performance. We used random forests of 50 trees to identify the features most predictive of an over or under performing district and created variable importance plots to visualize the partial dependence of the most important variables for over and under performing districts. 
   For the over performing school districts with positive residuals, we found the most important feature to be unemployment in 2020, with lower levels of county unemployment generally yielding higher performance than predicted. Similarly, we found that the next most important feature was the ten-year county population percent change, with districts in counties with decreasing populations actually yielding higher over-performance than districts in counties with increasing populations. Next, we found that the percentage of students who were economically disadvantaged had a negative effect on over-performance with over-performing districts with the highest percentages of economically disadvantaged students seeing the lowest gain over predicted performance. This seems to align with findings in other studies that state schools with higher populations of students who come from lower socio-economic households having lower relative performance. On the other hand, the percentage of students who are deemed "gifted and talented" appears to have a positive effect on over-performance, with districts with higher percentages of gifted students having higher than predicted performance scores. However, this feature is likely prone to sample bias, with certain districts that are likely already high-performing testing their students at a higher level than lower performing districts. The final feature in the top five is RUC code, a measure of how rural versus urban a school district is on a scale from 1 to 9. As seen in the figure below, we observe that there is overall in positive and increasing effect of RUC on over-performance, with more urban districts having higher than predicted performance than more rural districts. 
   
- 
+
 ```{r rf_all, file = "code/randomForest_new.R", echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
 ## RF ALL 
 load("r_objects/rf_vip.Rdata")
@@ -77,10 +78,11 @@ plot = partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") +
 print(plot)
 }
 ```
-
+### Overperforming Districts
 ```{r rf_over, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
 load("r_objects/rf_over_vip.Rdata")
 load("r_objects/rf_over.Rdata")
+
 # vip table
 rf_over_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Overperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
@@ -95,21 +97,18 @@ plot = partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") +
 print(plot)
 }
 ```
-
-
-
-```{r rf_all, file = "code/randomForest_new.R", echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
-load("r_objects/rf_vip.Rdata")
-load("r_objects/rf.Rdata")
+### Underperforming Districts
+```{r rf_under, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
+load("r_objects/rf_under_vip.Rdata")
 
 # vip table
-importance_table %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for All Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
+rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Underperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
 # top 5 partial dependence plots 
-feats = importance_table[,1]
+feats = rf_under_vip[,1]
 par(mfrow = c(3,2))
 for (i in feats){
-plot = partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+plot = partial(rf_under, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
   ggtitle(paste("Partial Dependence Plot of ", i)) + 
   xlab(paste(i)) + 
   ylab("Predicted Resid")

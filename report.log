@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.5.1)  8 MAY 2022 17:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.5.1)  8 MAY 2022 17:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -550,98 +550,298 @@ l.245
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<report_files/figure-latex/rf_over-1.pdf, id=62, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_all-1.pdf, id=62, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-1.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-1.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-1.pdf  used on input line 378.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-2.pdf, id=63, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-2.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-2.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-2.pdf  used on input line 379.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-3.pdf, id=64, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-3.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-3.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-3.pdf  used on input line 380.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-4.pdf, id=65, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-4.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-4.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-4.pdf  used on input line 381.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-5.pdf, id=66, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-5.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-5.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-5.pdf  used on input line 382.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-6.pdf, id=67, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-6.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-6.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-6.pdf  used on input line 383.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-7.pdf, id=68, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-7.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-7.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-7.pdf  used on input line 384.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-8.pdf, id=69, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-8.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-8.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-8.pdf  used on input line 385.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-9.pdf, id=70, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-9.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-9.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-9.pdf  used on input line 386.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_all-10.pdf, id=71, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_all-10.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_all-10.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_all-10.pdf  used on input line 387.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_over-1.pdf, id=72, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-1.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-1.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-1.pdf  used on input line 377.
+Package pdftex.def Info: report_files/figure-latex/rf_over-1.pdf  used on input line 389.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-2.pdf, id=63, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-2.pdf, id=73, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-2.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-2.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-2.pdf  used on input line 378.
+Package pdftex.def Info: report_files/figure-latex/rf_over-2.pdf  used on input line 390.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-3.pdf, id=64, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-3.pdf, id=74, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-3.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-3.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-3.pdf  used on input line 379.
+Package pdftex.def Info: report_files/figure-latex/rf_over-3.pdf  used on input line 391.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-4.pdf, id=65, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-4.pdf, id=75, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-4.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-4.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-4.pdf  used on input line 380.
+Package pdftex.def Info: report_files/figure-latex/rf_over-4.pdf  used on input line 392.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-5.pdf, id=66, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-5.pdf, id=76, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-5.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-5.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-5.pdf  used on input line 381.
+Package pdftex.def Info: report_files/figure-latex/rf_over-5.pdf  used on input line 393.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-6.pdf, id=67, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-6.pdf, id=77, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-6.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-6.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-6.pdf  used on input line 382.
+Package pdftex.def Info: report_files/figure-latex/rf_over-6.pdf  used on input line 394.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-7.pdf, id=68, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-7.pdf, id=78, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-7.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-7.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-7.pdf  used on input line 383.
+Package pdftex.def Info: report_files/figure-latex/rf_over-7.pdf  used on input line 395.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-8.pdf, id=69, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-8.pdf, id=79, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-8.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-8.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-8.pdf  used on input line 384.
+Package pdftex.def Info: report_files/figure-latex/rf_over-8.pdf  used on input line 396.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-9.pdf, id=70, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-9.pdf, id=80, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-9.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-9.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-9.pdf  used on input line 385.
+Package pdftex.def Info: report_files/figure-latex/rf_over-9.pdf  used on input line 397.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_over-10.pdf, id=71, 469.755pt x 325.215pt>
+<report_files/figure-latex/rf_over-10.pdf, id=81, 469.755pt x 325.215pt>
 File: report_files/figure-latex/rf_over-10.pdf Graphic file (type pdf)
 <use report_files/figure-latex/rf_over-10.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_over-10.pdf  used on input line 386.
+Package pdftex.def Info: report_files/figure-latex/rf_over-10.pdf  used on input line 398.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-1.pdf, id=82, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-1.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-1.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-1.pdf  used on input line 400.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-2.pdf, id=83, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-2.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-2.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-2.pdf  used on input line 401.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-3.pdf, id=84, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-3.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-3.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-3.pdf  used on input line 402.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-4.pdf, id=85, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-4.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-4.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-4.pdf  used on input line 403.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-5.pdf, id=86, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-5.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-5.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-5.pdf  used on input line 404.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-6.pdf, id=87, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-6.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-6.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-6.pdf  used on input line 405.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-7.pdf, id=88, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-7.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-7.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-7.pdf  used on input line 406.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-8.pdf, id=89, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-8.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-8.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-8.pdf  used on input line 407.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-9.pdf, id=90, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-9.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-9.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-9.pdf  used on input line 408.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<report_files/figure-latex/rf_under-10.pdf, id=91, 469.755pt x 325.215pt>
+File: report_files/figure-latex/rf_under-10.pdf Graphic file (type pdf)
+<use report_files/figure-latex/rf_under-10.pdf>
+Package pdftex.def Info: report_files/figure-latex/rf_under-10.pdf  used on input line 409.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 344--387
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Overfull \hbox (137.85938pt too wide) in paragraph at lines 378--410
+\T1/lmr/m/n/10 ### Over-per-form-ing Dis-tricts []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Overfull \hbox (143.69218pt too wide) in paragraph at lines 378--410
+\T1/lmr/m/n/10 ### Un-der-per-form-ing Dis-tricts []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 378--410
 []
  []
 
@@ -649,125 +849,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 344--387
 pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.387 
+l.410 
       ] [5
 pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.387 
-       <./report_files/figure-latex/rf_over-1.pdf>] [6 <./report_files/figure-latex/rf_over-2.pdf>] [7 <./report_files/figure-latex/rf_over-3.pdf>] [8 <./report_files/figure-latex/rf_over-4.pdf>] [9 <./report_files/figure-latex/rf_over-5.pdf>] [10 <./report_files/figure-latex/rf_over-6.pdf>] [11 <./report_files/figure-latex/rf_over-7.pdf>] [12 <./report_files/figure-latex/rf_over-8.pdf>] [13 <./report_files/figure-latex/rf_over-9.pdf>]
-<report_files/figure-latex/rf_under-1.pdf, id=172, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-1.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-1.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-1.pdf  used on input line 388.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-2.pdf, id=173, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-2.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-2.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-2.pdf  used on input line 389.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-3.pdf, id=174, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-3.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-3.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-3.pdf  used on input line 390.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-4.pdf, id=175, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-4.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-4.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-4.pdf  used on input line 391.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-5.pdf, id=176, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-5.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-5.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-5.pdf  used on input line 392.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-6.pdf, id=177, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-6.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-6.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-6.pdf  used on input line 393.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-7.pdf, id=178, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-7.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-7.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-7.pdf  used on input line 394.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-8.pdf, id=179, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-8.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-8.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-8.pdf  used on input line 395.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-9.pdf, id=180, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-9.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-9.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-9.pdf  used on input line 396.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<report_files/figure-latex/rf_under-10.pdf, id=181, 469.755pt x 325.215pt>
-File: report_files/figure-latex/rf_under-10.pdf Graphic file (type pdf)
-<use report_files/figure-latex/rf_under-10.pdf>
-Package pdftex.def Info: report_files/figure-latex/rf_under-10.pdf  used on input line 397.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 388--398
-[]
- []
-
-[14 <./report_files/figure-latex/rf_over-10.pdf>] [15 <./report_files/figure-latex/rf_under-1.pdf>] [16 <./report_files/figure-latex/rf_under-2.pdf>] [17 <./report_files/figure-latex/rf_under-3.pdf>] [18 <./report_files/figure-latex/rf_under-4.pdf>] [19 <./report_files/figure-latex/rf_under-5.pdf>] [20 <./report_files/figure-latex/rf_under-6.pdf>] [21 <./report_files/figure-latex/rf_under-7.pdf>] [22 <./report_files/figure-latex/rf_under-8.pdf>] [23 <./report_files/figure-latex/rf_under-9.pdf>] [24 <./report_files/figure-latex/rf_under-10.pdf>] (./report.aux)
+l.410 
+       <./report_files/figure-latex/rf_all-1.pdf>] [6 <./report_files/figure-latex/rf_all-2.pdf>] [7 <./report_files/figure-latex/rf_all-3.pdf>] [8 <./report_files/figure-latex/rf_all-4.pdf>] [9 <./report_files/figure-latex/rf_all-5.pdf>] [10 <./report_files/figure-latex/rf_all-6.pdf>] [11 <./report_files/figure-latex/rf_all-7.pdf>] [12 <./report_files/figure-latex/rf_all-8.pdf>] [13 <./report_files/figure-latex/rf_all-9.pdf>] [14 <./report_files/figure-latex/rf_all-10.pdf>] [15 <./report_files/figure-latex/rf_over-1.pdf>] [16 <./report_files/figure-latex/rf_over-2.pdf>] [17 <./report_files/figure-latex/rf_over-3.pdf>] [18 <./report_files/figure-latex/rf_over-4.pdf>] [19 <./report_files/figure-latex/rf_over-5.pdf>] [20 <./report_files/figure-latex/rf_over-6.pdf>] [21 <./report_files/figure-latex/rf_over-7.pdf>] [22 <./report_files/figure-latex/rf_over-8.pdf>] [23 <./report_files/figure-latex/rf_over-9.pdf>] [24 <./report_files/figure-latex/rf_over-10.pdf>] [25 <./report_files/figure-latex/rf_under-1.pdf>] [26 <./report_files/figure-latex/rf_under-2.pdf>] [27 <./report_files/figure-latex/rf_under-3.pdf>] [28 <./report_files/figure-latex/rf_under-4.pdf>] [29 <./report_files/figure-latex/rf_under-5.pdf>] [30 <./report_files/figure-latex/rf_under-6.pdf>] [31 <./report_files/figure-latex/rf_under-7.pdf>] [32 <./report_files/figure-latex/rf_under-8.pdf>] [33 <./report_files/figure-latex/rf_under-9.pdf>] [34 <./report_files/figure-latex/rf_under-10.pdf>] (./report.aux)
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: B96F87C0023B32C25C7CEC813C139151;855.
  ) 
 Here is how much of TeX's memory you used:
- 12365 strings out of 480265
- 198390 string characters out of 5893464
- 492165 words of memory out of 5000000
- 29989 multiletter control sequences out of 15000+600000
+ 12445 strings out of 480265
+ 201417 string characters out of 5893464
+ 494165 words of memory out of 5000000
+ 30049 multiletter control sequences out of 15000+600000
  513235 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,11n,63p,240b,331s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 60i,11n,63p,240b,329s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/alicekemp/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on report.pdf (24 pages, 304294 bytes).
+Output written on report.pdf (34 pages, 348821 bytes).
 PDF statistics:
- 349 PDF objects out of 1000 (max. 8388607)
- 258 compressed objects within 3 object streams
- 46 named destinations out of 1000 (max. 500000)
- 173 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 454 PDF objects out of 1000 (max. 8388607)
+ 332 compressed objects within 4 object streams
+ 56 named destinations out of 1000 (max. 500000)
+ 223 words of extra memory for PDF output out of 10000 (max. 10000000)
 

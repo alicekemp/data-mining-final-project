@@ -1,46 +1,66 @@
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kable, kableExtra)
+librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rpart.plot, caret, dplyr, mosaic, here, rsample, modelr, purrr, randomForest, randomForestExplainer, gbm, pdp, clusterR, cluster, clue, factoextra, lme4, viridis, ggspatial, basemaps, sf, rgeos, maptools, fdm2id, ggmap, scales, vip, kableExtra)
 
-data = read.csv("r_objects/merged_data_pred_resid.csv")
-
-## scale count variables
-data$PaidEligQty_mean = data$PaidEligQty_mean / data$n_students
-data$FreeElig_mean = data$FreeElig_mean / data$n_students
-data$RedcEligQty_mean = data$RedcEligQty_mean / data$n_students
-data$abuse_neglect_investigations = data$abuse_neglect_investigations / data$n_students
-data$DISTRICT.DISCIPLINE.RECORD.COUNT = data$DISTRICT.DISCIPLINE.RECORD.COUNT / data$n_students
-data$X05.OUT.OF.SCHOOL.SUSPENSION = data$X05.OUT.OF.SCHOOL.SUSPENSION / data$n_students
-data$X06.IN.SCHOOL.SUSPENSION = data$X06.IN.SCHOOL.SUSPENSION / data$n_students
-data$tot_operating_reevenue = data$tot_operating_reevenue / data$n_students
-data$tot_other_rev = data$tot_other_rev / data$n_students
-data$fund_balance = data$fund_balance / data$n_students
-data$net_assets_charter = data$net_assets_charter / data$n_students
-data$tot_expend_1819 = data$tot_expend_1819 / data$n_students
-
-write.csv(data, "data/model_scaled_data.csv")
-
+data = read.csv("r_objects/model_scaled_data.csv")
 mod = data %>%
   select(-c(lin_pred, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte)) %>%
   mutate(RUC.code = as.factor(RUC.code))
 
-set.seed(123)
-mod_split = initial_split(mod, 0.8)
-mod_train = training(mod_split)
-mod_test = testing(mod_split)
-
-## make some trees
-ed_tree = rpart(lin_resid ~ ., method = "anova", data=mod_train,
-                   control = rpart.control(minsplit=10, minbucket = 10, cp=.02, xval=5))
-data.frame(ed_tree$variable.importance) %>% write_csv(file = "figures/tree_vip.csv")
-fancyRpartPlot(ed_tree)
-# prune the tree based on the optimal cp value
-plotcp(ed_tree)
-printcp(ed_tree)
-
 ## make some forests
-#### random forest
-rf = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = mod_train, na.action = na.omit, mtry = 20, ntree = 50)
+over_perf = mod %>% filter(lin_resid > 0)
+over_split = initial_split(over_perf, 0.8)
+over_train = training(over_split)
+over_test = testing(over_split)
+
+#### random forest - over only 
+rf_over = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = over_train, na.action = na.omit, mtry = 83, ntree = 50)
+yhat_rf = predict(rf_over, newdata = over_test)
+yhat_rf = na.omit(yhat_rf)
+rmse_rf = sqrt(mean((yhat_rf - over_test$lin_resid)^2))
+
+# create VIP table
+imp_table_over = as.data.frame(rf_over$importance) %>% rownames_to_column("feature")
+colnames(imp_table_over) = c("feature", "importance")
+rf_over_vip = imp_table_over %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
+save(rf_over_vip, file = "r_objects/rf_over_vip.RData")
+
+# pdp of top 5 features by importance
+feats = rf_over_vip[,1]
+for (i in feats){
+plot = partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+  ggtitle(paste("Partial Dependence Plot of ", i)) + 
+  xlab(paste(i)) + 
+  ylab("Predicted Resid")
+print(plot)
+}
+
+## repeat for under performing districts
+under_perf = mod %>% filter(lin_resid < 0)
+under_split = initial_split(under_perf, 0.8)
+under_train = training(under_split)
+under_test = testing(under_split)
+
+#### random forest - over only 
+rf_under = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = under_train, na.action = na.omit, mtry = 83, ntree = 50)
+yhat_rf = predict(rf_under, newdata = under_test)
+yhat_rf = na.omit(yhat_rf)
+rmse_rf = sqrt(mean((yhat_rf - under_test$lin_resid)^2))
+
+imp_table_under = as.data.frame(rf_under$importance)
+colnames(imp_table_under) = "importance"
+imp_table_under = imp_table_under %>% arrange(desc(importance)) %>% rownames_to_column( "feature")
+
+feats = (imp_table_under[1:8,1])
+under_plots = for (i in feats){
+  plot = partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+    ggtitle(paste("Partial Dependence Plot of ", i)) + 
+    xlab(paste(i)) + 
+    ylab("Predicted Resid")
+  print(plot)
+}
+#### random forest - all
+rf = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = mod_train, na.action = na.omit, mtry = 83, ntree = 50)
 yhat_rf = predict(rf, newdata = mod_test)
 yhat_rf = na.omit(yhat_rf)
 rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))

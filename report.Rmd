@@ -79,6 +79,8 @@ plot = pdp::partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") +
 print(plot)
 }
 ```
+
+
 ### Overperforming Districts
 ```{r rf_over, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
 load("r_objects/rf_over_vip.Rdata")

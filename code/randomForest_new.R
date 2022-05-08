@@ -83,6 +83,18 @@ importance_table = importance_table %>% arrange(desc(as.numeric(importance))) %>
 write.csv(importance_table, "figures/rf_imp_table.csv")
 save(importance_table, file = "r_objects/rf_vip.RData")
 
+# pdp 
+# top 5 partial dependence plots 
+feats_all = importance_table[,1]
+par(mfrow = c(3,2))
+for (i in feats_all){
+  plot = pdp::partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+    ggtitle(paste("Partial Dependence Plot of ", i)) + 
+    xlab(paste(i)) + 
+    ylab("Predicted Resid")
+  print(plot)
+}
+
 #save training data
 save(over_train,under_train,mod_train, file = "r_objects/training_data.RData")
 save.image(file = "all_objects.RData")

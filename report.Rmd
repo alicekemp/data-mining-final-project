@@ -40,7 +40,7 @@ data.frame(outcomes_PCA_table$rotation) %>% kbl(booktabs = T, format = 'latex', 
 Next, we fit the loadings of PC1 on to our original district-level data resulting in a singular outcome performance variable. The next step in our analysis was to create a simple linear OLS regression of our new weighted outcome variable on a selection of covariates believed to be most indicative of performance based on previous literature. These features included median household income measured as a percent of the statewide median, the child poverty rate in each county, average faculty salary, along with percentages for student population by race (Black, Hispanic, White, Asian, Native American, Pacific Islander, and multi-racial). Child poverty percent effects has both the resources a child has access to and is associated with other deviant behavior like truancy. Percent state median income defines the percent of the mean income for the county of the states median income. For instance, a county with 1.5 is a county with a mean income 50% higher than the state median. Average school salary describes the amount of resources that are going to schools. As observed in the model results in Table 2, we find that percent of state median household income and average school salary are highly statistically significant in predicting district performance. This result supports other studies on the subject, however, this does not explain why some school districts who would be predicted to perform at a certain level do not. These districts are represented in the residuals of our linear model, which we will next use as the outcome variable in a series of machine learning models. 
 
 ```{r ols, echo = FALSE, message=FALSE, warning = FALSE, results = 'asis'}
-# load("r_objects/lin_mod.RData")
+load("r_objects/lin_mod.RData")
 stargazer(lin_mod, header = FALSE, title = "Linear Model - PC1")
 ```
 
@@ -62,16 +62,16 @@ tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable
 
 ```{r rf_all, echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
 ## RF ALL 
-# load("r_objects/rf_vip.Rdata")
-# load("r_objects/rf.Rdata")
+load("r_objects/rf_vip.Rdata")
+load("r_objects/rf.Rdata")
 
 # vip table
 importance_table %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for All Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
 # top 5 partial dependence plots 
-feats = importance_table[,1]
+feats_all = importance_table[,1]
 par(mfrow = c(3,2))
-for (i in feats){
+for (i in feats_all){
 plot = pdp::partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
   ggtitle(paste("Partial Dependence Plot of ", i)) + 
   xlab(paste(i)) + 
@@ -81,8 +81,8 @@ print(plot)
 ```
 ### Overperforming Districts
 ```{r rf_over, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
-# load("r_objects/rf_over_vip.Rdata")
-# load("r_objects/rf_over.Rdata")
+load("r_objects/rf_over_vip.Rdata")
+load("r_objects/rf_over.Rdata")
 
 # vip table
 rf_over_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Overperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
@@ -100,7 +100,7 @@ print(plot)
 ```
 ### Underperforming Districts
 ```{r rf_under, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
-# load("r_objects/rf_under_vip.Rdata")
+load("r_objects/rf_under_vip.Rdata")
 
 # vip table
 rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Underperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')

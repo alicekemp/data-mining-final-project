@@ -48,9 +48,9 @@ yhat_rf_under = predict(rf_under, newdata = under_test)
 yhat_rf_under = na.omit(yhat_rf_under)
 rmse_rf_under = sqrt(mean((yhat_rf_under - under_test$lin_resid)^2))
 
-imp_table_under = as.data.frame(rf_under$importance)
-colnames(imp_table_under) = "importance"
-rf_under_vip = imp_table_over %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
+imp_table_under = as.data.frame(rf_under$importance) %>% rownames_to_column("feature")
+colnames(imp_table_under) = c("feature", "importance")
+rf_under_vip = imp_table_under %>% arrange(desc(as.numeric(importance))) %>% top_n(5) 
 save(rf_under_vip, file = "r_objects/rf_under_vip.RData")
 
 feats = rf_under_vip[,1]

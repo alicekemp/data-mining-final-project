@@ -40,7 +40,7 @@ printcp(ed_tree)
 
 ## make some forests
 #### random forest
-rf = randomForest(lin_resid ~ . , data = mod_train, na.action = na.omit, mtry = 20, ntree = 50)
+rf = randomForest(lin_resid ~ . - n_students -DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, data = mod_train, na.action = na.omit, mtry = 20, ntree = 50)
 yhat_rf = predict(rf, newdata = mod_test)
 yhat_rf = na.omit(yhat_rf)
 rmse_rf = sqrt(mean((yhat_rf - mod_test$lin_resid)^2))
@@ -52,15 +52,40 @@ importance_table %>% arrange(desc(importance))
 write.csv(importance_table, "figures/rf_imp_table.csv")
 
 # partial dependence plots
+partial(rf, pred.var = "tot_operating_reevenue", plot = TRUE,
+        plot.engine = "ggplot2") + 
+  ggtitle("Partial Dependence Plot of Operating Revenue per Student") + 
+  xlab("OpRev") + 
+  ylab("Predicted Resid")
+
+
+partial(rf, pred.var = "tot_expend_1819", plot = TRUE,
+        plot.engine = "ggplot2") + 
+  ggtitle("Partial Dependence Plot of Previous Year Expenditure per Student") + 
+  xlab("Expenditure") + 
+  ylab("Predicted Resid")
+
+partial(rf, pred.var = "fund_balance", plot = TRUE,
+        plot.engine = "ggplot2") + 
+  ggtitle("Partial Dependence Plot of Fund Balance per Student") + 
+  xlab("Fund Balance") + 
+  ylab("Predicted Resid")
+
 partial(rf, pred.var = "st_pct_asian", plot = TRUE,
         plot.engine = "ggplot2") + 
   ggtitle("Partial Dependence Plot of Percent Students Asian") + 
   xlab("Percent") + 
   ylab("Predicted Resid")
 
-partial(rf, pred.var = "st_pct_ecodis", plot = TRUE,
+partial(rf, pred.var = "teach_pct_black", plot = TRUE,
         plot.engine = "ggplot2") + 
-  ggtitle("Partial Dependence Plot of Percent Students \n Economically Disadvantaged") + 
+  ggtitle("Partial Dependence Plot of Percent Teachers Black") + 
+  xlab("Percent") + 
+  ylab("Predicted Resid")
+
+partial(rf, pred.var = "st_pct_hisp", plot = TRUE,
+        plot.engine = "ggplot2") + 
+  ggtitle("Partial Dependence Plot of Percent Students Hispanic") + 
   xlab("Percent") + 
   ylab("Predicted Resid")
 
@@ -69,3 +94,6 @@ partial(rf, pred.var = "st_pct_ecodis", plot = TRUE,
   ggtitle("Partial Dependence Plot of Percent Students \n Economically Disadvantaged") + 
   xlab("Percent") + 
   ylab("Predicted Resid")
+
+
+

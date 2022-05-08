@@ -32,7 +32,7 @@ mod_test = testing(mod_split)
 ## make some trees
 ed_tree = rpart(lin_resid ~ ., method = "anova", data=mod_train,
                    control = rpart.control(minsplit=10, minbucket = 10, cp=.02, xval=5))
-ed_tree$variable.importance
+data.frame(ed_tree$variable.importance) %>% write_csv(file = "figures/tree_vip.csv")
 fancyRpartPlot(ed_tree)
 # prune the tree based on the optimal cp value
 plotcp(ed_tree)

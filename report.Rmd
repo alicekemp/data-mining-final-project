@@ -28,20 +28,28 @@ To start our analysis, we first merged our data and then created an aggregated "
 ```{r analysis, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, kable, kableExtra)
+librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer)
 
 testing = read.csv("r_objects/testing.csv")
 outcomes_PCA_table = prcomp(testing[,(1:8)], scale=TRUE, rank=1)
 data.frame(outcomes_PCA_table$rotation) %>% kbl(booktabs = T, format = 'latex', digits = 4, caption = "PCA of performance metrics") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```
+### OLS Model
+Next, we fit the loadings of PC1 on to our original district-level data resulting in a singular outcome performance variable. The next step in our analysis was to create a simple linear OLS regression of our new weighted outcome variable on a selection of covariates believed to be most indicative of performance based on previous literature. These features included median household income measured as a percent of the statewide median, the child poverty rate in each county, average faculty salary, along with percentages for student population by race (Black, Hispanic, White, Asian, Native American, Pacific Islander, and multi-racial). Child poverty percent effects has both the resources a child has access to and is associated with other deviant behavior like truancy. Percent state median income defines the percent of the mean income for the county of the states median income. For instance, a county with 1.5 is a county with a mean income 50% higher than the state median. Average school salary describes the amount of resources that are going to schools. As observed in the model results in Table 2, we find that percent of state median household income and average school salary are highly statistically significant in predicting district performance. This result supports other studies on the subject, however, this does not explain why some school districts who would be predicted to perform at a certain level do not. These districts are represented in the residuals of our linear model, which we will next use as the outcome variable in a series of machine learning models. 
 
-Next, we fit the loadings of PC1 on to our original district-level data resulting in a singular outcome performance variable. The next step in our analysis was to create a simple linear OLS regression of our new weighted outcome variable on a selection of covariates believed to be most indicative of performance based on previous literature. These features included median household income measured as a percent of the statewide median, the child poverty rate in each county, average faculty salary, along with percentages for student population by race (Black, Hispanic, White, Asian, Native American, Pacific Islander, and multi-racial). Child poverty percent effects has both the resources a child has access to and is associated with other deviant behavior like truancy. Percent state median income defines the percent of the mean income for the county of the states median income. For instance, a county with 1.5 is a county with a mean income 50% higher than the state median. Average school salary describes the amount of resources that are going to schools. As observed in the model results in Table 2, 
+```{r ols, echo = FALSE, message=FALSE, warning = FALSE, results = 'asis'}
+load("~/statistical-learning/data-mining-final-project/r_objects/lin_mod.RData")
+stargazer(lin_mod, header = FALSE, title = "Linear Model - PC1")
+```
 
-```{r}
-load("r_objects/prelim_lin_mod.R")
+### Decision Tree
+```{r tree, echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
+load("~/statistical-learning/data-mining-final-project/r_objects/lin_mod.RData")
+
 ```
 
 
+### Random Forest
 
 ## Findings
 

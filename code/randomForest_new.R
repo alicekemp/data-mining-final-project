@@ -4,7 +4,7 @@ librarian::shelf(rattle, tidyverse, haven, mosaic, foreach, stargazer, rpart, rp
 
 data = read.csv("r_objects/model_scaled_data.csv")
 mod = data %>%
-  select(-c(lin_pred, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte)) %>%
+  select(-c(lin_pred, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte, Pop..2020)) %>%
   mutate(RUC.code = as.factor(RUC.code))
 
 ## make some forests

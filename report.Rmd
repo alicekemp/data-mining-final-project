@@ -30,7 +30,7 @@ To start our analysis, we first merged our data and then created an aggregated "
 ```{r analysis, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer, randomForest)
+librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer, randomForest,rpart,rpart.plot)
 load(file = "all_objects.RData")
 # load("r_objects/training_data.RData")
 testing = read.csv("r_objects/testing.csv")
@@ -138,7 +138,7 @@ load("r_objects/rf_out_vip.Rdata")
 rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Education Outcomes") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
 # top 5 partial dependence plots 
-feats = rf_out_vip[,1]
+feats = imp_table_out[,1]
 par(mfrow = c(3,2))
 for (i in feats){
 plot = pdp::partial(rf_out, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 

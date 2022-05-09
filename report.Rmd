@@ -76,9 +76,7 @@ gridExtra::grid.arrange(predVactual,residVactual,ncol=2,top="Fig 1: Linear Model
 ```{r tree, file = "code/decision_tree.R", echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
 load("r_objects/tree_vip.Rdata")
 load("r_objects/tree.Rdata")
-#rpart.plot(ed_tree, type = 2, digits = 2, main = "Fig 2: CART for Predicted Residuals")
 
-tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```
 
 ### Random Forest

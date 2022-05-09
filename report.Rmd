@@ -46,6 +46,19 @@ data.frame(outcomes_PCA_table$rotation) %>% kbl(booktabs = T, format = 'latex', 
 ```{r ols, echo = FALSE, message=FALSE, warning = FALSE, results = 'asis'}
 load("r_objects/lin_mod.RData")
 stargazer(lin_mod, header = FALSE, title = "Table 2: Linear Model")
+
+predVactual = ggplot(ed) +
+  geom_point(aes(x=lin_pred,y=PC_outcome)) +
+  geom_abline(slope = 1,intercept = 0,color="red") +
+  xlab("Predicted Outcome (LM)") +
+  ylab("Actual Outcome (PC)")
+residVactual = ggplot(ed) +
+  geom_point(aes(x=lin_resid,y=PC_outcome)) +
+  geom_hline(yintercept = 0,color = 'red')+
+  xlab("Predicted Outcome (LM)") +
+  ylab("Actual Outcome (PC)")
+grid.arrange(predVactual,residVactual,ncol=2,top="Linear Model Predictions and Residuals")
+
 ```
 
 ### Decision Tree

@@ -30,7 +30,7 @@ To start our analysis, we first merged our data and then created an aggregated "
 ```{r analysis, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer, randomForest,rpart,rpart.plot, grid, gridExta, ggplot2)
+librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer, randomForest,rpart,rpart.plot, grid, gridExtra, ggplot2)
 load(file = "all_objects.RData")
 # load("r_objects/training_data.RData")
 testing = read.csv("r_objects/testing.csv")
@@ -57,7 +57,7 @@ residVactual = ggplot(ed) +
   geom_hline(yintercept = 0,color = 'red')+
   xlab("Predicted Outcome (LM)") +
   ylab("Actual Outcome (PC)")
-grid.arrange(predVactual,residVactual,ncol=2,top="Linear Model Predictions and Residuals")
+gridExtra::grid.arrange(predVactual,residVactual,ncol=2,top="Fig 1: Linear Model Predictions and Residuals")
 
 ```
 
@@ -67,7 +67,7 @@ grid.arrange(predVactual,residVactual,ncol=2,top="Linear Model Predictions and R
 ```{r tree, file = "code/decision_tree.R", echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
 load("r_objects/tree_vip.Rdata")
 load("r_objects/tree.Rdata")
-rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Fig 1: CART for Predicted Residuals")
+rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Fig 2: CART for Predicted Residuals")
 
 tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```
@@ -92,7 +92,8 @@ ggplot(mod_test, aes(x=yhat_forest,y=lin_resid))+
   geom_abline(slope = 1,intercept = 0,color="black",linetype="dashed") +
   geom_smooth() +
   xlab("Predicted Residual (randomForest)") +
-  ylab("Actual Residuals (Linear Model)")
+  ylab("Actual Residuals (Linear Model)") +
+  ggtitle("Fig 3: Predicted Residual vs. Actual Residuals")
 
 # top 5 partial dependence plots ALL
 feats_all = importance_table[,1]
@@ -118,7 +119,7 @@ gridExtra::grid.arrange(gridExtra::arrangeGrob(FreeElig_mean_plot,
                                     avg_salary_prof_plot,
                                     exp_pct_na_plot,
                                     description),
-                        top="Partial Dependence Plots for All Schools")
+                        top="Fig 4: Partial Dependence Plots for All Schools")
 
 
 ```
@@ -156,7 +157,7 @@ gridExtra::grid.arrange(gridExtra::arrangeGrob(st_pct_gifted_plot_over,
                                     RUC.code_plot_over,
                                     staff_pct_aux_plot_over,
                                     description_over),
-                        top="Partial Dependence Plots for Overperforming Schools")
+                        top="Fig 5: Partial Dependence Plots for Overperforming Schools")
 
 ```
   For under performers, the most consequential feature was avg_salary_central, which showed higher rates of underperformance as the average salary of a central administrators decreased. It plateaus around 100,000 then decreases slightly before plateauing from 125,000 through salaries as high as 300,000. This indicates that while central administration compensation is important, districts which averaged beyond 100,000 it tends to have no additional positive effects on education outcomes, and can even cause slight decreases in education outcomes
@@ -192,7 +193,7 @@ gridExtra::grid.arrange(gridExtra::arrangeGrob(avg_salary_central_plot_under,
                                     avg_salary_prof_plot_under,
                                     teach_pct_advdegrees_plot_under,
                                     description_over),
-                        top="Partial Dependence Plots for Underperforming Schools")
+                        top="Fig 6: Partial Dependence Plots for Underperforming Schools")
 
 
 ```
@@ -204,7 +205,7 @@ load("r_objects/rf_out_vip.Rdata")
 # vip table
 rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Education Outcomes") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
-# top 5 partial dependence plots 
+# FIG 7 
 feats = imp_table_out[,1]
 par(mfrow = c(3,2))
 for (i in feats){

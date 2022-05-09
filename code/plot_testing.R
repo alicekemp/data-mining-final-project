@@ -12,8 +12,6 @@ for (i in feats_all){
   plot_name = paste(i,"plot", sep = "_")
   assign(plot_name, plot)
 }
-
-par(mfrow = c(3,2))
 description = textGrob(
 "Models Generated using Random Forest Regression,
 used to predict the Residuals of the inital Linear Model.
@@ -22,10 +20,10 @@ the source of the Variation in educational outcomes
 for All School Districts"
 )
 gridExtra::grid.arrange(arrangeGrob(FreeElig_mean_plot, 
-                                    avg_salary_prof_plot,
-                                    staff_pct_profsupport_plot,
+                                    st_pct_careertech_plot,
                                     RUC.code_plot,
-                                    exp_pct_cartecheduc_plot,
+                                    avg_salary_prof_plot,
+                                    exp_pct_na_plot,
                                     description),
                         top="Partial Dependence Plots for All Schools")
 

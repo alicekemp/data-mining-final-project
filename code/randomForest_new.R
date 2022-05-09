@@ -7,6 +7,8 @@ mod = data %>%
   select(-c(lin_pred, X.1, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte, Pop..2020, n_students, DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, Enrollment, unemployment_2020)) %>%
   mutate(RUC.code = as.factor(RUC.code))
 
+set.seed(123)
+
 ## make some forests
 over_perf = mod %>% filter(lin_resid > 0)
 over_split = initial_split(over_perf, 0.8)

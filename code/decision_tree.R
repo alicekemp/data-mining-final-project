@@ -14,9 +14,6 @@ ed_tree = rpart(lin_resid ~ ., method = "anova", data=mod_train,
                 control = rpart.control(minsplit=20, minbucket = 20, cp=.02, xval=5))
 rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Fig 1: CART for Predicted Residuals")
 
-yhat_tree = predict(ed_tree, newdata = mod_test)
-yhat_tree = na.omit(yhat_tree)
-rmse_tree = sqrt(mean((yhat_tree - mod_test$lin_resid)^2))
 ## vip 
 vip_tree = data.frame(ed_tree$variable.importance)
 tree_vip = vip_tree %>% rownames_to_column( "feature") 

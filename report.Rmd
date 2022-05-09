@@ -15,6 +15,7 @@ output:
 ## Data
   The Data we used for our analysis was gathered primarily from the TEA, USDA, and the Census. We gathered TEA data on educational outcomes (Graduation Rates, Standardized Test Scores, Attendance, etc.), and school-district-level covariates (Student-Teacher Ratio, Teacher Pay, Disciplinary Activity, School Meals, etc.). We merged these variables onto socioeconomic indicators such as poverty rate, median income, and education levels. This aggregation had to be done at the county level, which means some researcher bias had to be introduced when deciding how to most appropriately aggregate outcomes data gathered at the district level up to the county level. All said, we had 87 covariates for analysis on 8 outcome variables:  
 
+
 * `ERW`: Average SAT evidence-based reading and writing score  
 * `MATH`: Average SAT mathematics score  
 * `TOTAL`: Average SAT total score  
@@ -65,10 +66,12 @@ gridExtra::grid.arrange(predVactual,residVactual,ncol=2,top="Fig 1: Linear Model
 ### Decision Tree
   For our decision tree and random forest models, we first scaled our variables that used counts as to normalize based on student enrollment in each district. Then, a decision tree was fitted with our residuals from the OLS model as the outcome variable of interest. As seen in Figure 1, the most important split was the scaled share of students in a district eligible for free meals, which is based on a student's household income level. For over-performing districts with positive residuals, we see a share less than 31%, indicating that these districts tend to have higher average household income. Over-performing districts with a predicted average residual of 0.38 also have lower un-allocated expenditure levels, scaled per student, and higher percentages of bilingual students. For districts with negative residuals, we find somewhat contradictory results, with RUC codes of both 4 and 9 leading to some of the most under-performing districts. RUC codes measure how rural a district is, with 1 being the most urban and 9 being the most rural. Thus, according to our decision tree, the most rural districts and those in the middle tend to be the most under-performing. Finally, smaller shares of discipline records per student appears to predict better performing districts, however the predicted residuals for both sides of this node are negative. Since we are concerned with overfitting our data, we will next use random forest models to minimize this risk. 
 
+![CART](figures/tree.png)
+
 ```{r tree, file = "code/decision_tree.R", echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
 load("r_objects/tree_vip.Rdata")
 load("r_objects/tree.Rdata")
-rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Fig 2: CART for Predicted Residuals")
+#rpart.plot(ed_tree, type = 2, digits = 2, main = "Fig 2: CART for Predicted Residuals")
 
 tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```

@@ -12,7 +12,7 @@ mod_test = testing(mod_split)
 ## make some trees
 ed_tree = rpart(lin_resid ~ ., method = "anova", data=mod_train,
                 control = rpart.control(minsplit=20, minbucket = 20, cp=.02, xval=5))
-rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Fig 2: CART for Predicted Residuals")
+rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Decision Tree for Predicted Residuals")
 
 ## vip 
 vip_tree = data.frame(ed_tree$variable.importance)

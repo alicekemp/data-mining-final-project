@@ -38,8 +38,13 @@ plot = partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") +
 print(plot)
 }
 
-## repeat for under performing districts
-under_perf = mod %>% filter(lin_resid < 0)
+#rm all caps for NAs
+mop = data %>%
+  select(-c(lin_pred, X.1, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte, Pop..2020, n_students, DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, Enrollment, unemployment_2020, DISTRICT.DISCIPLINE.RECORD.COUNT, X05.OUT.OF.SCHOOL.SUSPENSION)) %>%
+  mutate(RUC.code = as.factor(RUC.code))
+
+#repeat for all districts
+under_perf = mop %>% filter(lin_resid < 0)
 under_split = initial_split(under_perf, 0.8)
 under_train = training(under_split)
 under_test = testing(under_split)

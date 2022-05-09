@@ -56,18 +56,20 @@ load("r_objects/lin_mod.RData")
 stargazer(lin_mod, header = FALSE, title = "Linear Model")
 
 predVactual = ggplot(ed) +
-  geom_point(aes(x=lin_pred,y=PC_outcome)) +
-  geom_abline(slope = 1,intercept = 0,color="red") +
-  xlab("Predicted Outcome (LM)") +
-  ylab("Actual Outcome (PC)")
-residVactual = ggplot(ed) +
-  geom_point(aes(x=lin_resid,y=PC_outcome)) +
+  geom_point(aes(x=PC_outcome,y=lin_resid)) +
   geom_hline(yintercept = 0,color = 'red')+
-  xlab("Predicted Outcome (LM)") +
-  ylab("Actual Outcome (PC)")
+  ylab("Residual (LM)") +
+  xlab("Actual Outcome (PC)")
+residVactual = ggplot(ed) +
+  geom_point(aes(x=lin_pred,y=lin_resid)) +
+  geom_hline(yintercept = 0,color = 'red')+
+  ylab("Residual (LM)") +
+  xlab("Predicted Outcome")
 gridExtra::grid.arrange(predVactual,residVactual,ncol=2,top="Fig 1: Linear Model Predictions and Residuals")
 
 ```
+
+It's clear from the plots of both the *residuals* and the *predicted outcomes* against the actual Performance Index that there is a clear pattern that is not captured exclusively by regressing on economic and demographic indicators. In fact, there is a clear linear pattern in the residuals. Our subsequent analysis will delve deeper to detect what determines these patterns, and how much of it can be explained by the covariates at our disposal.
 
 ### Decision Tree
   For our decision tree and random forest models, we first scaled our variables that used counts as to normalize based on student enrollment in each district. Then, a decision tree was fitted with our residuals from the OLS model as the outcome variable of interest. As seen in Figure 1, the most important split was the scaled share of students in a district eligible for free meals, which is based on a student's household income level. For over-performing districts with positive residuals, we see a share less than 31%, indicating that these districts tend to have higher average household income. Over-performing districts with a predicted average residual of 0.38 also have lower un-allocated expenditure levels, scaled per student, and higher percentages of bilingual students. For districts with negative residuals, we find somewhat contradictory results, with RUC codes of both 4 and 9 leading to some of the most under-performing districts. RUC codes measure how rural a district is, with 1 being the most urban and 9 being the most rural. Thus, according to our decision tree, the most rural districts and those in the middle tend to be the most under-performing. We also see that lower expenditure on high school programs leads to higher levels of underperformance, which seems to fit classic theories relating to funding's effect on school performance. Finally, smaller shares of discipline records per student appears to predict better performing districts, however the predicted residuals for both sides of this node are negative. Since we are concerned with overfitting our data, we will next use random forest models to minimize this risk. 

@@ -7,6 +7,8 @@ mod = data %>%
   select(-c(lin_pred, X.1, X, PC_outcome, DistName, tot_staff_fte, tot_teach_fte, Pop..2020, n_students, DISTRICT.CUMULATIVE.YEAR.END.ENROLLMENT, Enrollment, unemployment_2020)) %>%
   mutate(RUC.code = as.factor(RUC.code))
 
+set.seed(123)
+
 ## make some forests
 over_perf = mod %>% filter(lin_resid > 0)
 over_split = initial_split(over_perf, 0.8)
@@ -65,10 +67,13 @@ under_plots = for (i in feats_under){
 }
 
 #repeat for all districts
+set.seed(123)
 mod_split = initial_split(mod, 0.8)
 mod_train = training(mod_split)
 mod_test = testing(mod_split)
 
+mod_test <- rbind(mod_train[1, ] , mod_test)
+mod_test <- mod_test[-1,]
 #### random forest - all
 rf = randomForest(lin_resid ~ ., data = mod_train, na.action = na.omit, mtry = 83, ntree = 50)
 yhat_rf = predict(rf, newdata = mod_test)

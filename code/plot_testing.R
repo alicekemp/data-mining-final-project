@@ -12,14 +12,14 @@ for (i in feats_all){
   plot_name = paste(i,"plot", sep = "_")
   assign(plot_name, plot)
 }
-description = textGrob(
+description = grid::textGrob(
 "Models Generated using Random Forest Regression,
 used to predict the Residuals of the inital Linear Model.
 These variables carry the most Importance in identifying 
 the source of the Variation in educational outcomes
 for All School Districts"
 )
-gridExtra::grid.arrange(arrangeGrob(FreeElig_mean_plot, 
+gridExtra::grid.arrange(gridExtra::arrangeGrob(FreeElig_mean_plot, 
                                     st_pct_careertech_plot,
                                     RUC.code_plot,
                                     avg_salary_prof_plot,
@@ -38,14 +38,14 @@ for (i in feats_over){
   plot_name = paste(i,"plot_over", sep = "_")
   assign(plot_name, plot)
 }
-description_over = textGrob(
+description_over = grid::textGrob(
 "Models Generated using Random Forest Regression,
 used to predict the Residuals of the inital Linear Model.
 These variables carry the most Importance in identifying 
 the source of the Variation in educational outcomes
 for Overperforming School Districts"
 )
-gridExtra::grid.arrange(arrangeGrob(st_pct_gifted_plot_over, 
+gridExtra::grid.arrange(gridExtra::arrangeGrob(st_pct_gifted_plot_over, 
                                     teach_turnover_rate_plot_over,
                                     Change_2010.20_pct_plot_over,
                                     RUC.code_plot_over,
@@ -63,14 +63,14 @@ for (i in feats_under){
   plot_name = paste(i,"plot_under", sep = "_")
   assign(plot_name, plot)
 }
-description_over = textGrob(
+description_over = grid::textGrob(
 "Models Generated using Random Forest Regression,
 used to predict the Residuals of the inital Linear Model.
 These variables carry the most Importance in identifying 
 the source of the Variation in educational outcomes
 for Underperforming School Districts"
 )
-gridExtra::grid.arrange(arrangeGrob(avg_salary_central_plot_under, 
+gridExtra::grid.arrange(gridExtra::arrangeGrob(avg_salary_central_plot_under, 
                                     RUC.code_plot_under,
                                     st_pct_speced_plot_under,
                                     avg_salary_prof_plot_under,

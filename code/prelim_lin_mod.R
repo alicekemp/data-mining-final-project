@@ -3,6 +3,8 @@ library(tidyverse)
 library(rsample)
 library(modelr)
 library(ggplot2)
+library(grid)
+library(gridExtra)
 
 #load data
 ed = read.csv("r_objects/model_data.csv")
@@ -33,12 +35,20 @@ write_csv(ed, "r_objects/merged_data_pred_resid.csv")
 save(lin_mod, file = 'r_objects/lin_mod.RData')
 
 
-ggplot(ed) +
-  geom_point(aes(x=PC_outcome,y=lin_pred)) +
-  geom_hline(yintercept = 0,color = 'red')
-ggplot(ed) +
-  geom_point(aes(x=PC_outcome,y=lin_resid)) +
-  geom_hline(yintercept = 0,color = 'red')
+predVactual = ggplot(ed) +
+  geom_point(aes(x=lin_pred,y=PC_outcome)) +
+  geom_abline(slope = 1,intercept = 0,color="red") +
+  xlab("Predicted Outcome (LM)") +
+  ylab("Actual Outcome (PC)")
+residVactual = ggplot(ed) +
+  geom_point(aes(x=lin_resid,y=PC_outcome)) +
+  geom_hline(yintercept = 0,color = 'red')+
+  xlab("Predicted Outcome (LM)") +
+  ylab("Actual Outcome (PC)")
+grid.arrange(predVactual,residVactual,ncol=2,top="Linear Model Predictions and Residuals")
+predVactual
+residVactual
+
 
 ggplot(ed) +
   geom_point(aes(x=PC_outcome,y=lin_pred)) +

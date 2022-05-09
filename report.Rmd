@@ -128,6 +128,25 @@ print(plot)
 ```
 
 
+```{r rf_out, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
+load("r_objects/rf_out_vip.Rdata")
+
+# vip table
+rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Education Outcomes") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
+
+# top 5 partial dependence plots 
+feats = rf_out_vip[,1]
+par(mfrow = c(3,2))
+for (i in feats){
+plot = pdp::partial(rf_out, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+  ggtitle(paste("Partial Dependence Plot of ", i)) + 
+  xlab(paste(i)) + 
+  ylab("PC_outcome")
+print(plot)
+}
+```
+
+
 ## Conclusion
 
   A severe limitation to the data was the masking of many of the student fields. The reason the data was masked is because it was available to the public. If certain values were made available it would give anyone the means to impute the identities of students who are in these groups. An unfortunate side effect is the elimination of many fields which could have been descriptive for controlling and predicting education outcome. This included but is not limited to fields like immigration or migrant status, dyslexia, foster care status, homelessness, or military connected. These were among the fields which had to be removed in the cleaning process due to NA values so the variation in these fields was not able to be accounted for. A massive improvement to this study would be to conduct it with access to this masked data, which may need to occur within a state regulatory institution which has clearance to view the information. 

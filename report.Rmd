@@ -30,7 +30,7 @@ To start our analysis, we first merged our data and then created an aggregated "
 ```{r analysis, echo = FALSE, warning = FALSE, message = FALSE, results = 'asis'}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")}
-librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer, randomForest,rpart,rpart.plot)
+librarian::shelf(tidyverse, haven, kableExtra, modelr, rsample, stargazer, randomForest,rpart,rpart.plot, grid, gridExtra, ggplot2)
 load(file = "all_objects.RData")
 # load("r_objects/training_data.RData")
 testing = read.csv("r_objects/testing.csv")
@@ -46,21 +46,34 @@ data.frame(outcomes_PCA_table$rotation) %>% kbl(booktabs = T, format = 'latex', 
 ```{r ols, echo = FALSE, message=FALSE, warning = FALSE, results = 'asis'}
 load("r_objects/lin_mod.RData")
 stargazer(lin_mod, header = FALSE, title = "Table 2: Linear Model")
+
+predVactual = ggplot(ed) +
+  geom_point(aes(x=lin_pred,y=PC_outcome)) +
+  geom_abline(slope = 1,intercept = 0,color="red") +
+  xlab("Predicted Outcome (LM)") +
+  ylab("Actual Outcome (PC)")
+residVactual = ggplot(ed) +
+  geom_point(aes(x=lin_resid,y=PC_outcome)) +
+  geom_hline(yintercept = 0,color = 'red')+
+  xlab("Predicted Outcome (LM)") +
+  ylab("Actual Outcome (PC)")
+gridExtra::grid.arrange(predVactual,residVactual,ncol=2,top="Fig 1: Linear Model Predictions and Residuals")
+
 ```
 
 ### Decision Tree
-For our decision tree and random forest models, we first scaled our variables that used counts as to normalize based on student enrollment in each district. Then, a decision tree was fitted with our residuals from the OLS model as the outcome variable of interest. As seen in Figure 1, the most important split was the scaled share of students in a district eligible for free meals, which is based on a student's household income level. For over-performing districts with positive residuals, we see a share less than 31%, indicating that these districts tend to have higher average household income. Over-performing districts with a predicted average residual of 0.38 also have lower un-allocated expenditure levels, scaled per student, and higher percentages of bilingual students. For districts with negative residuals, we find somewhat contradictory results, with RUC codes of both 4 and 9 leading to some of the most under-performing districts. RUC codes measure how rural a district is, with 1 being the most urban and 9 being the most rural. Thus, according to our decision tree, the most rural districts and those in the middle tend to be the most under-performing. Finally, smaller shares of discipline records per student appears to predict better performing districts, however the predicted residuals for both sides of this node are negative. Since we are concerned with overfitting our data, we will next use random forest models to minimize this risk. 
+  For our decision tree and random forest models, we first scaled our variables that used counts as to normalize based on student enrollment in each district. Then, a decision tree was fitted with our residuals from the OLS model as the outcome variable of interest. As seen in Figure 1, the most important split was the scaled share of students in a district eligible for free meals, which is based on a student's household income level. For over-performing districts with positive residuals, we see a share less than 31%, indicating that these districts tend to have higher average household income. Over-performing districts with a predicted average residual of 0.38 also have lower un-allocated expenditure levels, scaled per student, and higher percentages of bilingual students. For districts with negative residuals, we find somewhat contradictory results, with RUC codes of both 4 and 9 leading to some of the most under-performing districts. RUC codes measure how rural a district is, with 1 being the most urban and 9 being the most rural. Thus, according to our decision tree, the most rural districts and those in the middle tend to be the most under-performing. Finally, smaller shares of discipline records per student appears to predict better performing districts, however the predicted residuals for both sides of this node are negative. Since we are concerned with overfitting our data, we will next use random forest models to minimize this risk. 
 
 ```{r tree, file = "code/decision_tree.R", echo = FALSE, message=FALSE, warning=FALSE, results = 'asis'}
 load("r_objects/tree_vip.Rdata")
 load("r_objects/tree.Rdata")
-rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Fig 1: CART for Predicted Residuals")
+rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Fig 2: CART for Predicted Residuals")
 
 tree_vip_top %>% kable(booktabs = T, format = "latex", caption = "CART: Variable Importance") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 ```
 
 ### Random Forest
-Our next step in modeling over and under performing school districts was to use a random forest on the residuals found in the linear OLS regression. Using a random forest with all features as possible splits, we created a model with a root mean squared error of 1.17, lower than the error from the CART regression above. The most important variables selected in the new random forest model were the average students eligible for the free meal program, the percent of students in career/tech programs, the rural index of the district, the average salary for district employees working in professional services, and the district's teacher turnover rate. Looking at partial dependence plots of these top five features, we can interpret the marginal effects of increasing these feature values on the residuals found in the OLS model, thus giving an easily interpretable estimate of how certain district characteristics lead to over and under performance.  
+Our next step in modeling over and under performing school districts was to use a random forest on the residuals found in the linear OLS regression. Using a random forest with all features as possible splits, we created a model with a root mean squared error of 1.17, lower than the error from the CART regression above. Looking at partial dependence plots of these top five features, we can interpret the marginal effects of increasing these feature values on the residuals found in the OLS model, thus giving an easily interpretable estimate of how certain district characteristics lead to over and under performance.  
   The first partial dependence plot demonstrates the negative correlation between the number of students eligible for free meals, based on their household income, and the predicted residuals. The graph implies that districts with relatively low (0 to 0.25) shares of students eligible for free meals tend to have positive residuals, or over performance. However, as this share increases, the residuals become more negative, implying that districts with larger shares of students eligible for free meals tend to under-perform their predicted performance. Moving on to the share of students in career/tech programs, we observe that districts with larger shares actually tend to under-perform their predicted outcomes thus implying a negative correlation. Next, we look at the partial dependence of RUC code, which measures how rural a district is with 1 being the most urban and 9 being the most rural. We find varying results for this variable, with all codes correlated with negative predicted residuals - further analysis in later sections of this report will attempt to uncover the true correlation. Moving on to the average salary for professional services, we find results for negative predicted residuals only and find that there is an interesting dependence with the marginal effect of increasing salary first moving predicted residuals towards zero before dropping steeply. Overall, average professional services salaries in a district above $75,000 appear to be correlated with under-performing districts, although this trend bottoms out quickly. Lastly, we observe the partial dependence of unallocated expenditure per student - actual expenditures that districts spent, but did not distribute into other programs. We find an interesting trend for this variable, with over-performance linked to districts spending less than 28% of their expenditures on un-allocated spending and an increasingly negative correlation with under-performance after this threshold. 
 
 ```{r rf_all, echo = FALSE, message = FALSE, warning = FALSE, results = 'asis'}
@@ -71,16 +84,44 @@ load("r_objects/rf.Rdata")
 # vip table
 importance_table %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for All Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
-# top 5 partial dependence plots 
+yhat_forest =  predict(rf,newdata=mod_test)
+mod_test = cbind(mod_test,yhat_forest)
+
+ggplot(mod_test, aes(x=yhat_forest,y=lin_resid))+
+  geom_jitter() +
+  geom_abline(slope = 1,intercept = 0,color="black",linetype="dashed") +
+  geom_smooth() +
+  xlab("Predicted Residual (randomForest)") +
+  ylab("Actual Residuals (Linear Model)") +
+  ggtitle("Fig 3: Predicted Residual vs. Actual Residuals")
+
+# top 5 partial dependence plots ALL
 feats_all = importance_table[,1]
-par(mfrow = c(3,2))
 for (i in feats_all){
-plot = pdp::partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
-  ggtitle(paste("Partial Dependence Plot of ", i)) + 
-  xlab(paste(i)) + 
-  ylab("Predicted Resid")
-print(plot)
+  
+  plot = pdp::partial(rf, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+    ggtitle(paste(i)) + 
+    xlab(paste(i)) + 
+    ylab("Predicted Resid")
+  plot_name = paste(i,"plot", sep = "_")
+  assign(plot_name, plot)
 }
+description = grid::textGrob(
+"Models Generated using Random Forest Regression,
+used to predict the Residuals of the inital Linear Model.
+These variables carry the most Importance in identifying 
+the source of the Variation in educational outcomes
+for All School Districts"
+)
+gridExtra::grid.arrange(gridExtra::arrangeGrob(FreeElig_mean_plot, 
+                                    st_pct_careertech_plot,
+                                    RUC.code_plot,
+                                    avg_salary_prof_plot,
+                                    exp_pct_na_plot,
+                                    description),
+                        top="Fig 4: Partial Dependence Plots for All Schools")
+
+
 ```
   To further deepen the model, we next split our data into districts with positive and negative residuals, representing districts that over performed relative to their predicted performance and those who under performed relative to their predicted performance. We used random forests of 50 trees to identify the features most predictive of an over or under performing district and created variable importance plots to visualize the partial dependence of the most important variables for over and under performing districts. 
   For the over performing school districts with positive residuals, we found the most important feature to be the percentage of students characterized as "gifted and talented" in a district. We find a positive overall correlation with overperformance, with increasing shares of gifted students leading to over-performance of a school district. The next plot shows the partial dependence of the change in county population from 2010 to 2020, which utilized county-level data from the U.S. Census. We observe a surprisingly negative trend between population change and over-performance, with districts in shrinking counties having higher positive residuals than districts in growing counties. One possible explanation for this trend is that the counties that shrunk the most tended to be less heavily populated than the counties that grew the most between 2010 and 2020. Thus, we have far fewer observations in for the school districts in shrinking counties, which may be unfairly coloring our results. The next dependence plot covers the marginal effect of RUC code, a measure of how rural versus urban a county is on a scale from 1 to 9, with 1 being the most urban and 9 being the most rural. As seen in the figure below, we observe that there is overall a positive and increasing effect of RUC on over-performance, with more rural districts over-performing by a higher margin than more urban districts. This seems to contradict what our predictions would be regarding higher performing urban districts in major metropolitan districts. However, since there a many more schools within an urban district versus an urban district, our results are likely heavily biased towards overperformance in rural districts with very few schools aggregating to the district level. The final plot shows the partial dependence of the percent of district staff that work as auxiliary faculty, including food service workers, bus drivers, secretaries, and custodial staff. We observe an overall negative trend, with a steep dropoff in overperformance at staff percentages over 20%. This trend indicates that as the share of auxiliary staff increases, we likely see a corresponding decrease in the share of teachers, which would likely lead to higher student-to-teacher ratios, a classic indicator of lower student performance.  
@@ -94,20 +135,38 @@ load("r_objects/rf_over.Rdata")
 # vip table
 rf_over_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Overperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
-# top 5 partial dependence plots 
 feats_over = rf_over_vip[,1]
-par(mfrow = c(3,2))
 for (i in feats_over){
-plot = pdp::partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
-  ggtitle(paste("Partial Dependence Plot of ", i)) + 
-  xlab(paste(i)) + 
-  ylab("Predicted Resid")
-print(plot)
+  plot = pdp::partial(rf_over, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+    ggtitle(paste(i)) + 
+    xlab(paste(i)) + 
+    ylab("Predicted Resid")
+  plot_name = paste(i,"plot_over", sep = "_")
+  assign(plot_name, plot)
 }
+description_over = grid::textGrob(
+"Models Generated using Random Forest Regression,
+used to predict the Residuals of the inital Linear Model.
+These variables carry the most Importance in identifying 
+the source of the Variation in educational outcomes
+for Overperforming School Districts"
+)
+gridExtra::grid.arrange(gridExtra::arrangeGrob(st_pct_gifted_plot_over, 
+                                    teach_turnover_rate_plot_over,
+                                    Change_2010.20_pct_plot_over,
+                                    RUC.code_plot_over,
+                                    staff_pct_aux_plot_over,
+                                    description_over),
+                        top="Fig 5: Partial Dependence Plots for Overperforming Schools")
+
 ```
   For under performers, the most consequential feature was avg_salary_central, which showed higher rates of underperformance as the average salary of a central administrators decreased. It plateaus around 100,000 then decreases slightly before plateauing from 125,000 through salaries as high as 300,000. This indicates that while central administration compensation is important, districts which averaged beyond 100,000 it tends to have no additional positive effects on education outcomes, and can even cause slight decreases in education outcomes
-
   The next most important feature was rural indicator codes, which displayed a heterogeneous effect from varying levels of urban development. What is striking is the massive gap between the two most rural codes, 8 and 9, which represent counties with fewer than 2,500 residents either adjacent to a metropolitan area for 8 or non-adjacent to a metropolitan area for 9. This is likely due to small sample sizes of each group in the underperforming districts, 8 and 9 being containing 13 and 11 observations respectively, and being the fourth and second smallest respectively. What is apparent is higher performance, or less underperformance, from counties with the highest urban development category 1, which represent populations of over 1 million people. While this category has the most observations in the underperformer subset, it is likely because it the largest group in the original data set and yet still has fewer than a third of its observations in the underperformer subset, in addition to being the second lowest underperformer.  Urban metropolitan areas with comparable underperformance were in category 6, which represented counties with populations between 2,500 and 19,999 which were adjacent to metropolitan areas. Ultimately these results of gross under performance were obscured by small sample sizes, as counties sizes which were exceptional tended to have very few observations like 5, urban counties with greater than 20,000 not adjacent to metropolitan areas, which had only 4 observation in the underperformer subset.
+  The next most important variable for underperformers is st_pct_speced, which refers to the percentage of students in special education. We see a massive rise if even over 5% are in special ed, and mostly a plateau afterwards. This variable is likely a proxy for resources available to the school in general. Special education has a perception as a luxury and has been the subject of cuts in the state of Texas in the past. If a school has enough funding to has special education at all, it also has funding for numerous other features which boost education outcomes.
+  The next most important variable for underperformers is avg_salary_prof, or the average salary of teachers in a district. We see a steady rise till around 55,000 where the residuals plateau. At 75,000 the residuals plumet and remain regardless of increases to teacher salary. This is an unexpected result as generally a higher paid teacher would have more certification, and therefore be more qualified. Considering there are only 2 observations above 100,000 the higher salaries can be taken as outliers, but there are more observation greater than 75,000 that follow the trend as well, warranting further study into the circumstances of these well paid underperforming teachers.
+  The final underperforming partial dependence plot somewhat refutes the former, as it shows the precent of teachers with advanced degrees. There is a sharp decrease in underperformance if the percentage of teacher with advanced degrees rises above even 3% and sharply increases until roughly 25%, after which it plateaus. This indicates that higher salary does not necessarily mean more qualifications, since the two variable have different associations with outcome variance. It also shows that while having some advanced degree holders absolutely is crucial in mitigating underperformance, there is a very clear limit to how much improve performance, after which it is mostly ineffective. 
+
+  
 ### Underperforming Districts
 ```{r rf_under, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
 load("r_objects/rf_under_vip.Rdata")
@@ -116,16 +175,35 @@ load("r_objects/rf_under_vip.Rdata")
 rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Underperforming Districts") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
 # top 5 partial dependence plots 
-feats = rf_under_vip[,1]
-par(mfrow = c(3,2))
-for (i in feats){
-plot = pdp::partial(rf_under, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
-  ggtitle(paste("Partial Dependence Plot of ", i)) + 
-  xlab(paste(i)) + 
-  ylab("Predicted Resid")
-print(plot)
+feats_under = rf_under_vip[,1]
+for (i in feats_under){
+  plot = pdp::partial(rf_under, pred.var = i, plot = TRUE, plot.engine = "ggplot2") + 
+    ggtitle(paste(i)) + 
+    xlab(paste(i)) + 
+    ylab("Predicted Resid")
+  plot_name = paste(i,"plot_under", sep = "_")
+  assign(plot_name, plot)
 }
+description_over = grid::textGrob(
+"Models Generated using Random Forest Regression,
+used to predict the Residuals of the inital Linear Model.
+These variables carry the most Importance in identifying 
+the source of the Variation in educational outcomes
+for Underperforming School Districts"
+)
+gridExtra::grid.arrange(gridExtra::arrangeGrob(avg_salary_central_plot_under, 
+                                    RUC.code_plot_under,
+                                    st_pct_speced_plot_under,
+                                    avg_salary_prof_plot_under,
+                                    teach_pct_advdegrees_plot_under,
+                                    description_over),
+                        top="Fig 6: Partial Dependence Plots for Underperforming Schools")
+
+
 ```
+  The most explanatory feature for determining education outcomes is st_pct_ecodis, which is the percentage of students who are economically disadvantaged. While there is some variance, the line steadily decreases as percent increases. There are likely several reasons for this. First, education outcomes often are effected by the home life of the child and the resources they have access to. This can effect their ability to buy school supplies, get access to food, and also be a general source of stress in their life, all of which can effect education outcomes. The second reason is that high percentages of economically disadvantaged people means a poorer overall population. Because schools are funded by property taxes, if all the children in the school are economically disadvantaged, it is likely that the school district is not bringing as much money in to pay for teachers, programs, and amenities.
+  The second most important variable for education outcomes is FreeElig_mean, which is the average number of students who are eligible for free school meals. This variable tells a similar story to the last, which is that the more people who are in need of resources, the lower the expected outcomes of educational achievement. 
+  The next most important variable for education outcomes is avg_salary_central. Much like the underperformers, this variable rises steeply then plateaus, though a bit earlier around 75,000. This highlights the importance of a well funded administration as well as the pit falls of over funding, with virtually no increases after the 75,000 threshold.
 
 
 ```{r rf_out, file = "code/randomForest_new.R", results = 'asis', message = FALSE, echo = FALSE, warning = FALSE}
@@ -134,7 +212,7 @@ load("r_objects/rf_out_vip.Rdata")
 # vip table
 rf_under_vip %>% kbl(booktabs = T, format = "latex", caption = "Random Forest: Variable Importance for Education Outcomes") %>% kable_classic(full_width = F, html_font = "Cambria") %>% kable_styling(latex_options = 'hold_position')
 
-# top 5 partial dependence plots 
+# FIG 7 
 feats = imp_table_out[,1]
 par(mfrow = c(3,2))
 for (i in feats){
@@ -148,5 +226,8 @@ print(plot)
 
 
 ## Conclusion
-  A severe limitation to the data was the masking of many of the student fields. The reason the data was masked is because it was available to the public. If certain values were made available it would give anyone the means to impute the identities of students who are in these groups. An unfortunate side effect is the elimination of many fields which could have been descriptive for controlling and predicting education outcome. This included but is not limited to fields like immigration or migrant status, dyslexia, foster care status, homelessness, or military connected. These were among the fields which had to be removed in the cleaning process due to NA values so the variation in these fields was not able to be accounted for. A massive improvement to this study would be to conduct it with access to this masked data, which may need to occur within a state regulatory institution which has clearance to view the information. 
-  A recurring highly explanatory feature was rural coding, particularly when looking at the under and overachieving districts separately. It is likely part of this explanatory power is due to reduced sample sizes for each of these random forests. This is another reason why this study could benefit from a regional or nationwide comparison, so the rural coding can reduce the impact of outliers by increasing observations from those group. If this feature is explanatory, then having more data to drown out the noise could help better illustrate how urban vs rural environment s effect education outcomes. If the feature is not explanatory then it will drop out of the top 5 for a better fitting parameter. This questions warrants further study but is beyond the scope of our analysis, due to the massive amount of data aggregation which would need to be performed to get the same feature list for all 50 states or even the sunbelt states.
+  School performance has been heavily researched with many results pointing to household income, racial makeup, and student-to-teacher ratios being the most impactful determinants to high student performance. However, few studies have analyzed the existing pool of over-performing and under-performing schools to determine what differentiates a school that should be performing well, but doesn’t. The state of Texas provides a sufficiently large sample of school districts for such analysis and also features comparatively high racial, urban, and attainment diversity across districts and counties.  
+  A severe limitation to the data was the masking of many of the student fields. The reason the data was masked is because it was available to the public. If certain values were made available it would give anyone the means to impute the identities of students who are in these groups. An unfortunate side effect is the elimination of many fields which could have been descriptive for controlling and predicting education outcome. This included but is not limited to fields like immigration or migrant status, dyslexia, foster care status, homelessness, or military connected. These were among the fields which had to be removed in the cleaning process due to NA values so the variation in these fields was not able to be accounted for. A massive improvement to this study would be to conduct it with access to this masked data, which may need to occur within a state regulatory institution which has clearance to view the information.   
+  A recurring highly explanatory feature was rural coding, particularly when looking at the under and overachieving districts separately. It is likely part of this explanatory power is due to reduced sample sizes for each of these random forests. This is another reason why this study could benefit from a regional or nationwide comparison, so the rural coding can reduce the impact of outliers by increasing observations from those group. If this feature is explanatory, then having more data to drown out the noise could help better illustrate how urban vs rural environment s effect education outcomes. If the feature is not explanatory then it will drop out of the top 5 for a better fitting parameter. This questions warrants further study but is beyond the scope of our analysis, due to the massive amount of data aggregation which would need to be performed to get the same feature list for all 50 states or even the sunbelt states.  
+  In our study, we find that the share of students eligible for free meals acts as a quasi measure of average household income and an significant indicator for underperformance. In addition, we find that higher average salaries for  professional support staff including therapists, counselors, nurses, librarians, and department heads, tends to be correlated with underperformance, but suffers from a deficiency in data at lower and upper quantiles. We also find a negative correlation with unallocated expenditure per student, with higher shares of a district’s budget spent on items not distributed to specific programs being correlated with underperformance at shares above 28%. This variable may serve as an indicator of fiscal responsibility, with districts spending large portions of their budgets on unallocated items seeing higher levels of underperformance. 
+	We next break down our results further by zeroing in on the most important features that predict over versus under performance. For overperforming districts, we find that the share of students deemed “gifted and talented” is the most important feature and is positively correlated with higher shares indicating higher levels of over-performance. We also find that county-level population change from 2010 to 2020 is a significant predictor, however we find a negative trend in predicting overperformance. We believe that this is another result of flaws in data collection, with the smallest counties with the least number of observations heavily biasing our data. Finally, we observe the percent of district workers that work as auxiliary staff on overperformance and find an overall negative trend, indicating that as the share of auxiliary staff increases, we likely see a corresponding decrease in the share of teachers, which would likely lead to higher student-to-teacher ratios, a classic indicator of lower student performance.

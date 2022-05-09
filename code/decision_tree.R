@@ -18,7 +18,7 @@ rpart.plot(ed_tree, type = 2, digits = 2, varlen = -15, main = "Decision Tree fo
 vip_tree = data.frame(ed_tree$variable.importance)
 tree_vip = vip_tree %>% rownames_to_column( "feature") 
 colnames(tree_vip) = c("feature", "importance")
-tree_vip_top = tree_vip %>% top_n(8) 
+tree_vip_top = tree_vip %>% top_n(5) 
 save(tree_vip_top, file = "r_objects/tree_vip.Rdata")
 save(ed_tree, file = "r_objects/tree.Rdata")
 
